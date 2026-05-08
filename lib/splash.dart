@@ -68,7 +68,7 @@ class SplashScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color: ColorConstants.primary.withOpacity(0.20),
+                          color: ColorConstants.primaryLight.withValues(alpha: 0.5),
                           blurRadius: 25,
                           offset: const Offset(0, 10),
                         ),
@@ -78,7 +78,7 @@ class SplashScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
                       child: Image.asset(
-                        "assets/images/logo.png",
+                        "assets/images/Mediaid AI Logo.png",
                         fit: BoxFit.cover,
                       ),
                     ),

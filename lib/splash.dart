@@ -19,7 +19,7 @@ class SplashScreen extends StatelessWidget {
             child: Container(
               height: 170,
               decoration: BoxDecoration(
-                color: ColorConstants.primary.withOpacity(0.06),
+                color: ColorConstants.primary.withValues(alpha: 0.6),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(120),
                   topRight: Radius.circular(120),
@@ -35,7 +35,7 @@ class SplashScreen extends StatelessWidget {
               width: 240,
               height: 120,
               decoration: BoxDecoration(
-                color: ColorConstants.primary.withOpacity(0.08),
+                color: ColorConstants.primary.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
@@ -48,7 +48,7 @@ class SplashScreen extends StatelessWidget {
               width: 230,
               height: 120,
               decoration: BoxDecoration(
-                color: ColorConstants.primaryLight.withOpacity(0.08),
+                color: ColorConstants.primaryLight.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
@@ -102,11 +102,6 @@ class SplashScreen extends StatelessWidget {
                   const Text(
                     "Smart First Aid Assistant",
                     style: AppTextStyles.subHeading,
-                    // style: TextStyle(
-                    //   fontSize: 15,
-                    //   color: ColorConstants.bodyText,
-                    //   fontWeight: FontWeight.w500,
-                    // ),
                   ),
 
                   const SizedBox(height: 60),

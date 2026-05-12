@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mediaid_ui/components/constants.dart';
+import 'package:mediaid_ui/home_screen.dart';
 
 class Navigationbar extends StatefulWidget {
   const Navigationbar({super.key});
@@ -12,7 +13,7 @@ class _NavigationbarState extends State<Navigationbar> {
   int selectedIndex = 0;
 
   final List<Widget> pages = [
-    Text('Home Screen'),
+    HomeScreen(),
     Text('History'),
     Text('Guide'),
     Text('Profile'),

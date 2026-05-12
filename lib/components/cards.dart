@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 
-
 // ================= SCAN CARD =================
 
 class ScanCard extends StatelessWidget {
   final VoidCallback onTap;
 
-  const ScanCard({
-    super.key,
-    required this.onTap,
-  });
+  const ScanCard({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +17,7 @@ class ScanCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         gradient: const LinearGradient(
-          colors: [
-            ColorConstants.primaryDark,
-            ColorConstants.primary,
-          ],
+          colors: [ColorConstants.primaryDark, ColorConstants.primary],
         ),
       ),
       child: Material(
@@ -52,9 +45,7 @@ class ScanCard extends StatelessWidget {
                 const SizedBox(height: 14),
                 Text(
                   "Scan Injury",
-                  style: AppTextStyles.subHeading.copyWith(
-                    color: Colors.white,
-                  ),
+                  style: AppTextStyles.subHeading.copyWith(color: Colors.white),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -71,8 +62,6 @@ class ScanCard extends StatelessWidget {
     );
   }
 }
-
-
 
 // ================= ACTION CARD =================
 
@@ -102,23 +91,15 @@ class ActionCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: ColorConstants.border,
-            ),
+            border: Border.all(color: ColorConstants.border),
           ),
           child: Column(
             children: [
-              Icon(
-                icon,
-                color: iconColor,
-                size: 30,
-              ),
+              Icon(icon, color: iconColor, size: 30),
               const SizedBox(height: 10),
               Text(
                 title,
-                style: AppTextStyles.body.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -127,8 +108,6 @@ class ActionCard extends StatelessWidget {
     );
   }
 }
-
-
 
 // ================= SAFETY CARD =================
 
@@ -142,9 +121,7 @@ class SafetyCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: ColorConstants.border,
-        ),
+        border: Border.all(color: ColorConstants.border),
       ),
       child: Row(
         children: [
@@ -154,9 +131,7 @@ class SafetyCard extends StatelessWidget {
               children: [
                 Text(
                   "Stay prepared. Stay safe.",
-                  style: AppTextStyles.subHeading.copyWith(
-                    fontSize: 16,
-                  ),
+                  style: AppTextStyles.subHeading.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -177,6 +152,89 @@ class SafetyCard extends StatelessWidget {
               Icons.shield_rounded,
               color: ColorConstants.primary,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ================= RESULT INFO CARD =================
+
+class ResultInfoCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final TextStyle? valueStyle;
+  final Widget? trailing;
+
+  const ResultInfoCard({
+    super.key,
+    required this.title,
+    required this.value,
+    this.valueStyle,
+    this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: ColorConstants.border),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppTextStyles.lightBody),
+                const SizedBox(height: 10),
+                Text(
+                  value,
+                  style:
+                      valueStyle ??
+                      AppTextStyles.title.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          if (trailing != null) trailing!,
+        ],
+      ),
+    );
+  }
+}
+
+// ================= RECOMMENDATION CARD =================
+
+class RecommendationCard extends StatelessWidget {
+  const RecommendationCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: ColorConstants.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "AI Recommendation",
+            style: AppTextStyles.subHeading.copyWith(fontSize: 16),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            "It is recommended to seek medical attention immediately.",
+            style: AppTextStyles.danger.copyWith(height: 1.5),
           ),
         ],
       ),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mediaid_ui/components/bottom_navigation_bar.dart';
 import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/constants.dart';
-import 'package:mediaid_ui/components/navigation_Bar.dart';
-import 'package:mediaid_ui/components/navigation_bar.dart' hide Navigationbar;
 import 'package:mediaid_ui/components/onboarding_indicator.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/onboarding_two.dart';
@@ -42,9 +41,7 @@ class OnboardingComponent extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) =>  Navigationbar(),
-                      ),
+                      MaterialPageRoute(builder: (context) => BottomNavBar()),
                     );
                   },
 
@@ -145,15 +142,32 @@ class OnboardingComponent extends StatelessWidget {
                   if (currentIndex == 0) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => const OnboardingScreenTwo(),
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const OnboardingScreenTwo(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                              // Slide from right to left
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              final tween = Tween(
+                                begin: begin,
+                                end: end,
+                              ).chain(CurveTween(curve: Curves.easeInOut));
+                              final offsetAnimation = animation.drive(tween);
+
+                              return SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              );
+                            },
                       ),
                     );
                   } else {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>  const Navigationbar(),
+                        builder: (context) => const BottomNavBar(),
                       ),
                     );
                   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mediaid_ui/components/bottom_navigation_bar.dart';
 import 'package:mediaid_ui/components/cards.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
@@ -18,7 +20,7 @@ class ResultScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
               color: ColorConstants.heading),
-          onPressed: () {},
+          onPressed: () {Get.offAll(BottomNavBar());},
         ),
         title: Text(
           "Analysis Result",

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mediaid_ui/components/bottom_navigation_bar.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
-import 'package:mediaid_ui/home_screen.dart';
 
 class ProcessingScreen extends StatelessWidget {
   const ProcessingScreen({super.key});
@@ -23,7 +23,7 @@ class ProcessingScreen extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Get.offAll(HomeScreen());
+                      Get.offAll(BottomNavBar());
                     },
                     icon: const Icon(Icons.arrow_back_ios_new_rounded, color: ColorConstants.background,),
                   ),

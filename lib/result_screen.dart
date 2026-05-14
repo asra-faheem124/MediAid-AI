@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mediaid_ui/components/bottom_navigation_bar.dart';
+import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/cards.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
+import 'package:mediaid_ui/components/top_bar.dart';
+import 'package:mediaid_ui/emergency_screen.dart';
+import 'package:mediaid_ui/first_aid_screen.dart';
 
 class ResultScreen extends StatelessWidget {
   const ResultScreen({super.key});
@@ -11,37 +14,18 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.background,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: ColorConstants.heading),
-          onPressed: () {Get.offAll(BottomNavBar());},
-        ),
-        title: Text(
-          "Analysis Result",
-          style: AppTextStyles.subHeading.copyWith(
-            fontWeight: FontWeight.bold,
-            color: ColorConstants.heading,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.share_outlined, color: ColorConstants.heading),
-          ),
-        ],
-      ),
-
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           child: Column(
             children: [
+              // Top Bar
+              TopBar(
+                title: "Analysis Result",
+                actionIcon: Icons.share_outlined,
+              ),
+              const SizedBox(height: 20),
+
               // Injury Result Card
               ResultInfoCard(
                 title: "Detected Injury",
@@ -54,10 +38,7 @@ class ResultScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
-                    child: Text(
-                      "🔥",
-                      style: TextStyle(fontSize: 26),
-                    ),
+                    child: Text("🔥", style: TextStyle(fontSize: 26)),
                   ),
                 ),
               ),
@@ -93,8 +74,25 @@ class ResultScreen extends StatelessWidget {
               const Spacer(),
 
               // Bottom Buttons
-              const BottomActionButtons(),
+              Row(
+                children: [
+                  Expanded(
+                    child: SecondaryButtons(
+                      text: "View First Aid",
+                      onPressed: () => Get.to(FirstAidScreen()),
+                    ),
+                  ),
 
+                  const SizedBox(width: 14),
+
+                  Expanded(
+                    child: DangerButton(
+                      text: "Emergency Help",
+                      onPressed: () => Get.to(EmergencyScreen()),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 16),
 
               Text(
@@ -108,59 +106,6 @@ class ResultScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-
-// =====================================================
-// BOTTOM BUTTONS
-// =====================================================
-
-class BottomActionButtons extends StatelessWidget {
-  const BottomActionButtons({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: OutlinedButton(
-            onPressed: () {},
-            style: OutlinedButton.styleFrom(
-              minimumSize: const Size.fromHeight(56),
-              side: const BorderSide(color: ColorConstants.primary),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-            ),
-            child: Text(
-              "View First Aid",
-              style: AppTextStyles.primaryText,
-            ),
-          ),
-        ),
-
-        const SizedBox(width: 12),
-
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ColorConstants.danger,
-              elevation: 0,
-              minimumSize: const Size.fromHeight(56),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-            ),
-            child: Text(
-              "Emergency Help",
-              style: AppTextStyles.button,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

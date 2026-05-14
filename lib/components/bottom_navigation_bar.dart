@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mediaid_ui/components/constants.dart';
+import 'package:mediaid_ui/history_screen.dart';
 import 'package:mediaid_ui/home_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -14,7 +15,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final List<Widget> pages = [
     HomeScreen(),
-    const Text('History'),
+    HistoryScreen(),
     const Text('Guide'),
     const Text('Profile'),
   ];

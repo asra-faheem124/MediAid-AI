@@ -5,8 +5,15 @@ import 'package:mediaid_ui/components/text_styles.dart';
 // =========== PRIMARY BUTTON ===========
 class PrimaryButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
-  const PrimaryButton({super.key, required this.text, required this.onPressed});
+  final VoidCallback onPressed;  
+  final IconData actionIcon;
+
+  const PrimaryButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    required this.actionIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,7 @@ class PrimaryButton extends StatelessWidget {
 
             const SizedBox(width: 10),
 
-            const Icon(Icons.arrow_forward, color: Colors.white),
+            Icon(actionIcon, color: Colors.white,),
           ],
         ),
       ),

@@ -102,7 +102,7 @@ class ProcessingScreen extends StatelessWidget {
               ),
               PrimaryButton(
                 text: "Check Result",
-                onPressed: () => Get.to(const ResultScreen()),
+                onPressed: () => Get.to(const FirstAidScreen())
               ),
               const Spacer(),
             ],

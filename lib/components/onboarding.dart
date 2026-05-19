@@ -136,7 +136,6 @@ class OnboardingComponent extends StatelessWidget {
 
               // Next Button
               PrimaryButton(
-                                actionIcon: Icons.arrow_forward,
                 text: currentIndex == 1 ? "Get Started" : "Next",
 
                 onPressed: () {

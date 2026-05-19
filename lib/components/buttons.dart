@@ -6,13 +6,11 @@ import 'package:mediaid_ui/components/text_styles.dart';
 class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;  
-  final IconData actionIcon;
 
   const PrimaryButton({
     super.key,
     required this.text,
     required this.onPressed,
-    required this.actionIcon,
   });
 
   @override
@@ -39,8 +37,6 @@ class PrimaryButton extends StatelessWidget {
             Text(text, style: AppTextStyles.button),
 
             const SizedBox(width: 10),
-
-            Icon(actionIcon, color: Colors.white,),
           ],
         ),
       ),
@@ -114,6 +110,56 @@ class DangerButton extends StatelessWidget {
       child: Text(
         text,
         style: AppTextStyles.button,
+      ),
+    );
+  }
+}
+
+
+// ================= SOCIAL LOGIN BUTTON ===================
+class SocialLoginButton extends StatelessWidget {
+  final String text;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const SocialLoginButton({
+    super.key,
+    required this.text,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 58,
+
+      child: OutlinedButton.icon(
+        onPressed: onPressed,
+
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(
+            color: ColorConstants.border,
+          ),
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+        ),
+
+        icon: Icon(
+          icon,
+          color: ColorConstants.primary,
+          size: 34,
+        ),
+
+        label: Text(
+          text,
+          style: AppTextStyles.body.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }

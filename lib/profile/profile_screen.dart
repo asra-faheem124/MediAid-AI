@@ -4,8 +4,8 @@ import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/profile_components.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/components/top_bar.dart';
-import 'package:mediaid_ui/edit_profile_screen.dart';
-import 'package:mediaid_ui/medical_info_screen.dart';
+import 'package:mediaid_ui/profile/edit_profile_screen.dart';
+import 'package:mediaid_ui/firstAid/medical_info_screen.dart';
 import 'package:mediaid_ui/settings_screen.dart';
 
 class ProfileScreen extends StatelessWidget {

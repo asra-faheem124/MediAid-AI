@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "686808185076",
+    "project_id": "mediaid-ai-d92eb",
+    "storage_bucket": "mediaid-ai-d92eb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686808185076:android:c08b3a7e6250b926d786a1",
+        "android_client_info": {
+          "package_name": "com.example.mediaid_ui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_XpAjA2byC7JKOV2h2oj8JXXIzoWfcMI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

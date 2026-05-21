@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mediaid_ui/components/cards.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
-import 'package:mediaid_ui/processing_screen.dart';
+import 'package:mediaid_ui/firstAid/processing_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

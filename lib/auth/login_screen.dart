@@ -4,7 +4,7 @@ import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/form_components.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
-import 'package:mediaid_ui/signup_screen.dart';
+import 'package:mediaid_ui/auth/signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

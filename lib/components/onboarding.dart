@@ -4,7 +4,7 @@ import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/onboarding_indicator.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
-import 'package:mediaid_ui/onboarding_two.dart';
+import 'package:mediaid_ui/firstScreens/onboarding_two.dart';
 
 class OnboardingComponent extends StatelessWidget {
   final String text;

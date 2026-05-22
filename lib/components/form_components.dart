@@ -10,6 +10,8 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final IconData icon;
   final bool isPassword;
+  final bool obscureText;
+  final VoidCallback? onToggle;
   final TextEditingController? controller;
   final TextInputType keyboardType;
 
@@ -18,6 +20,8 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     required this.icon,
     this.isPassword = false,
+    this.obscureText = false,
+    this.onToggle,
     this.controller,
     this.keyboardType = TextInputType.text,
   });
@@ -27,7 +31,7 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      obscureText: isPassword,
+      obscureText: isPassword ? obscureText : false,
 
       decoration: InputDecoration(
         hintText: hintText,
@@ -38,13 +42,17 @@ class CustomTextField extends StatelessWidget {
           color: ColorConstants.primary,
         ),
 
-        suffixIcon:
-            isPassword
-                ? const Icon(
-                  Icons.visibility_off_outlined,
+        suffixIcon: isPassword
+            ? IconButton(
+                onPressed: onToggle,
+                icon: Icon(
+                  obscureText
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
                   color: ColorConstants.lightText,
-                )
-                : null,
+                ),
+              )
+            : null,
 
         filled: true,
         fillColor: Colors.white,
@@ -55,7 +63,6 @@ class CustomTextField extends StatelessWidget {
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-
           borderSide: const BorderSide(
             color: ColorConstants.border,
           ),
@@ -63,7 +70,6 @@ class CustomTextField extends StatelessWidget {
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-
           borderSide: const BorderSide(
             color: ColorConstants.primary,
             width: 1.5,

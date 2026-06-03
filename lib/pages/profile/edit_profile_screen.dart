@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/form_components.dart';
+import 'package:mediaid_ui/components/profile_components.dart';
 import 'package:mediaid_ui/components/top_bar.dart';
 
-class MedicalInfoScreen extends StatelessWidget {
-  const MedicalInfoScreen({super.key});
+class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,42 +20,40 @@ class MedicalInfoScreen extends StatelessWidget {
           child: Column(
             children: [
               const TopBar(
-                title: "Medical Information",
-                actionIcon: Icons.health_and_safety_outlined,
+                title: "Edit Profile",
+                actionIcon: Icons.check,
+                showBackButton: true,
               ),
 
               const SizedBox(height: 30),
 
+              const ProfileImagePicker(),
+
+              const SizedBox(height: 30),
+
               const CustomTextField(
-                hintText: "Blood Group",
-                icon: Icons.bloodtype_outlined,
+                hintText: "Full Name",
+                icon: Icons.person_outline_rounded,
               ),
 
               const SizedBox(height: 20),
 
               const CustomTextField(
-                hintText: "Allergies",
-                icon: Icons.warning_amber_rounded,
+                hintText: "Email Address",
+                icon: Icons.email_outlined,
               ),
 
               const SizedBox(height: 20),
 
               const CustomTextField(
-                hintText: "Medical Conditions",
-                icon: Icons.medical_information_outlined,
-              ),
-
-              const SizedBox(height: 20),
-
-              const CustomTextField(
-                hintText: "Emergency Contact",
-                icon: Icons.call_outlined,
+                hintText: "Phone Number",
+                icon: Icons.phone_outlined,
               ),
 
               const SizedBox(height: 40),
 
               PrimaryButton(
-                text: "Save Information",
+                text: "Save Changes",
                 onPressed: () {},
               ),
             ],

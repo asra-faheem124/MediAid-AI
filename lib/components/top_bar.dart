@@ -6,32 +6,50 @@ import 'package:mediaid_ui/components/text_styles.dart';
 
 class TopBar extends StatelessWidget {
   final String title;
-  final IconData actionIcon;
+  final IconData? actionIcon;
+  final bool showBackButton;
 
-  const TopBar({super.key, required this.title, required this.actionIcon});
+  const TopBar({
+    super.key,
+    required this.title,
+    this.actionIcon,
+    this.showBackButton = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
       children: [
-        IconButton(
-          onPressed: () {
-            Get.offAll(BottomNavBar());
-          },
-
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-        ),
-
-        Text(
-          title,
-          style: AppTextStyles.subHeading.copyWith(
-            color: ColorConstants.heading,
+        // Back Button
+        if (showBackButton)
+          IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          )
+        else
+          const SizedBox(width: 48), // placeholder to align title
+        // Title
+        Expanded(
+          child: Center(
+            child: Text(
+              title,
+              style: AppTextStyles.subHeading.copyWith(
+                color: ColorConstants.heading,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
 
-        IconButton(onPressed: () {}, icon: Icon(actionIcon)),
+        // Action Icon
+        if (actionIcon != null)
+          IconButton(onPressed: () {}, icon: Icon(actionIcon))
+        else
+          const SizedBox(width: 48), // placeholder for alignment
       ],
     );
   }

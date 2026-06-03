@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mediaid_ui/components/bottom_navigation_bar.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
-import 'package:mediaid_ui/firstScreens/onboarding_one.dart';
+import 'package:mediaid_ui/pages/firstScreens/onboarding_one.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,19 +15,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     super.initState();
-
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const OnboardingScreenOne(),
-        ),
-      );
+    Timer(Duration(seconds: 3), () {
+      LoggedIn(context);
     });
+  }
+
+  Future<void> LoggedIn(BuildContext context) async {
+    if (user != null) {
+      Get.offAll(() => BottomNavBar());
+    } else {
+      Get.off(() => OnboardingScreenOne());
+    }
   }
 
   @override

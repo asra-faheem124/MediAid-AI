@@ -14,6 +14,8 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onToggle;
   final TextEditingController? controller;
   final TextInputType keyboardType;
+  final String? errorText;
+  final String? Function(String?)? validator;
 
   const CustomTextField({
     super.key,
@@ -24,24 +26,22 @@ class CustomTextField extends StatelessWidget {
     this.onToggle,
     this.controller,
     this.keyboardType = TextInputType.text,
+    this.errorText,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
       obscureText: isPassword ? obscureText : false,
-
+      validator: validator,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: AppTextStyles.lightBody,
-
-        prefixIcon: Icon(
-          icon,
-          color: ColorConstants.primary,
-        ),
-
+        errorText: errorText,
+        prefixIcon: Icon(icon, color: ColorConstants.primary),
         suffixIcon: isPassword
             ? IconButton(
                 onPressed: onToggle,
@@ -53,27 +53,30 @@ class CustomTextField extends StatelessWidget {
                 ),
               )
             : null,
-
         filled: true,
         fillColor: Colors.white,
-
         contentPadding: const EdgeInsets.symmetric(
           vertical: 18,
+          horizontal: 16,
         ),
-
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(
-            color: ColorConstants.border,
-          ),
+          borderSide: const BorderSide(color: ColorConstants.border),
         ),
-
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: const BorderSide(
             color: ColorConstants.primary,
             width: 1.5,
           ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: const BorderSide(color: Colors.red, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: const BorderSide(color: Colors.red, width: 1.5),
         ),
       ),
     );
@@ -88,11 +91,7 @@ class SearchTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
 
-  const SearchTextField({
-    super.key,
-    required this.hintText,
-    this.controller,
-  });
+  const SearchTextField({super.key, required this.hintText, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -103,24 +102,17 @@ class SearchTextField extends StatelessWidget {
         hintText: hintText,
         hintStyle: AppTextStyles.lightBody,
 
-        prefixIcon: const Icon(
-          Icons.search,
-          color: ColorConstants.lightText,
-        ),
+        prefixIcon: const Icon(Icons.search, color: ColorConstants.lightText),
 
         filled: true,
         fillColor: Colors.white,
 
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 18,
-        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 18),
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
 
-          borderSide: const BorderSide(
-            color: ColorConstants.border,
-          ),
+          borderSide: const BorderSide(color: ColorConstants.border),
         ),
 
         focusedBorder: OutlineInputBorder(

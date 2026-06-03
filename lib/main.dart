@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mediaid_ui/auth/signup_screen.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/firebase_options.dart';
-import 'package:mediaid_ui/firstScreens/splash.dart';
+import 'package:mediaid_ui/pages/auth/forgotPassword.dart';
+import 'package:mediaid_ui/pages/auth/login_screen.dart';
+import 'package:mediaid_ui/pages/auth/signup_screen.dart';
+import 'package:mediaid_ui/pages/profile/profile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         scaffoldBackgroundColor: ColorConstants.background,
       ),
-      home: SignupScreen(),
+      home: LoginScreen(),
     );
   }
 }

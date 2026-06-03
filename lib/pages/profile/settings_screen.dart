@@ -30,6 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const TopBar(
                 title: "Settings",
                 actionIcon: Icons.settings,
+                showBackButton: true,
               ),
 
               const SizedBox(height: 30),

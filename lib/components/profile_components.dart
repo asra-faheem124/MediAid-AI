@@ -3,7 +3,15 @@ import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
-  const ProfileHeaderCard({super.key});
+  final String name;
+  final String email;
+  // final String imageUrl;
+  const ProfileHeaderCard({
+    super.key,
+    required this.name,
+    required this.email,
+    // required this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +35,13 @@ class ProfileHeaderCard extends StatelessWidget {
               shape: BoxShape.circle,
             ),
 
-            child: const Icon(
-              Icons.person,
-              color: Colors.white,
-              size: 46,
-            ),
+            child: const Icon(Icons.person, color: Colors.white, size: 46),
           ),
 
           const SizedBox(height: 16),
 
           Text(
-            "Asra Faheem",
+            name,
             style: AppTextStyles.subHeading.copyWith(
               color: Colors.white,
               fontSize: 22,
@@ -47,7 +51,7 @@ class ProfileHeaderCard extends StatelessWidget {
           const SizedBox(height: 6),
 
           Text(
-            "asra@email.com",
+          email,
             style: AppTextStyles.body.copyWith(
               color: Colors.white.withValues(alpha: 0.9),
             ),
@@ -86,26 +90,18 @@ class ProfileMenuTile extends StatelessWidget {
         onTap: onTap,
 
         child: Ink(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 18,
-            vertical: 18,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
 
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
 
-            border: Border.all(
-              color: ColorConstants.border,
-            ),
+            border: Border.all(color: ColorConstants.border),
           ),
 
           child: Row(
             children: [
-              Icon(
-                icon,
-                color: iconColor,
-              ),
+              Icon(icon, color: iconColor),
 
               const SizedBox(width: 16),
 

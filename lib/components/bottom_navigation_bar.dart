@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mediaid_ui/components/constants.dart';
-import 'package:mediaid_ui/guide_screen.dart';
-import 'package:mediaid_ui/history_screen.dart';
+
 import 'package:mediaid_ui/home_screen.dart';
-import 'package:mediaid_ui/profile/profile_screen.dart';
+import 'package:mediaid_ui/pages/firstAid/guide_screen.dart';
+import 'package:mediaid_ui/pages/firstAid/history_screen.dart';
+import 'package:mediaid_ui/pages/profile/profile_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});

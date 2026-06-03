@@ -4,8 +4,9 @@ import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/form_components.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
-import 'package:mediaid_ui/auth/signup_screen.dart';
 import 'package:mediaid_ui/controller/AuthController.dart';
+import 'package:mediaid_ui/pages/auth/forgotPassword.dart';
+import 'package:mediaid_ui/pages/auth/signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final _formkey = GlobalKey<FormState>();
@@ -65,10 +66,19 @@ class LoginScreen extends StatelessWidget {
 
                 const SizedBox(height: 10),
 
-                 CustomTextField(
+                CustomTextField(
                   controller: email,
                   hintText: "Enter your email",
                   icon: Icons.email_outlined,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "Email cannot be empty";
+                    }
+                    if (!GetUtils.isEmail(value.trim())) {
+                      return "Enter a valid email";
+                    }
+                    return null;
+                  },
                 ),
 
                 const SizedBox(height: 22),
@@ -92,6 +102,15 @@ class LoginScreen extends StatelessWidget {
                     onToggle: () {
                       _authcontroller.isVisible.toggle();
                     },
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return "Password cannot be empty";
+                      }
+                      if (value.trim().length < 6) {
+                        return "Password must be at least 6 characters";
+                      }
+                      return null;
+                    },
                   ),
                 ),
 
@@ -101,18 +120,30 @@ class LoginScreen extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
 
-                  child: Text(
-                    "Forgot Password?",
-                    style: AppTextStyles.primaryText.copyWith(fontSize: 14),
+                  child: InkWell(
+                    onTap: () => Get.to(ForgetPassword()),
+                    child: Text(
+                      "Forgot Password?",
+                      style: AppTextStyles.primaryText.copyWith(fontSize: 14),
+                    ),
                   ),
                 ),
 
                 const SizedBox(height: 34),
 
                 // ================= LOGIN BUTTON =================
-                PrimaryButton(text: "Login", onPressed: () {
-                  _authcontroller.login(formkey: _formkey, email: email, password: password);
-                }),
+                PrimaryButton(
+                  text: "Login",
+                  onPressed: () {
+                    if (_formkey.currentState!.validate()) {
+                      _authcontroller.login(
+                        formkey: _formkey,
+                        email: email,
+                        password: password,
+                      );
+                    }
+                  },
+                ),
 
                 const SizedBox(height: 30),
 

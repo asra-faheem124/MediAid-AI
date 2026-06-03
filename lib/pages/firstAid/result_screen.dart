@@ -5,7 +5,7 @@ import 'package:mediaid_ui/components/cards.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/components/top_bar.dart';
-import 'package:mediaid_ui/firstAid/emergency_screen.dart';
+import 'package:mediaid_ui/pages/firstAid/emergency_screen.dart';
 
 class FirstAidScreen extends StatelessWidget {
   const FirstAidScreen({super.key});

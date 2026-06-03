@@ -4,7 +4,7 @@ import 'package:mediaid_ui/components/bottom_navigation_bar.dart';
 import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
-import 'package:mediaid_ui/firstAid/result_screen.dart';
+import 'package:mediaid_ui/pages/firstAid/first_aid_screen.dart';
 
 class ProcessingScreen extends StatelessWidget {
   const ProcessingScreen({super.key});

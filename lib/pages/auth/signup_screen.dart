@@ -4,8 +4,8 @@ import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/form_components.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
-import 'package:mediaid_ui/auth/login_screen.dart';
 import 'package:mediaid_ui/controller/AuthController.dart';
+import 'package:mediaid_ui/pages/auth/login_screen.dart';
 
 class SignupScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -69,6 +69,13 @@ class SignupScreen extends StatelessWidget {
                   controller: name,
                   hintText: "Enter your full name",
                   icon: Icons.person_outline_rounded,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "Name cannot be empty";
+                    }
+
+                    return null;
+                  },
                 ),
 
                 const SizedBox(height: 22),
@@ -85,6 +92,15 @@ class SignupScreen extends StatelessWidget {
                   controller: email,
                   hintText: "Enter your email",
                   icon: Icons.email_outlined,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "Email cannot be empty";
+                    }
+                    if (!GetUtils.isEmail(value.trim())) {
+                      return "Enter a valid email";
+                    }
+                    return null;
+                  },
                 ),
 
                 const SizedBox(height: 22),
@@ -104,7 +120,15 @@ class SignupScreen extends StatelessWidget {
                     isPassword: true,
 
                     obscureText: !_authcontroller.isVisible.value,
-
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return "Password cannot be empty";
+                      }
+                      if (value.trim().length < 6) {
+                        return "Password must be at least 6 characters";
+                      }
+                      return null;
+                    },
                     onToggle: () {
                       _authcontroller.isVisible.toggle();
                     },
@@ -132,12 +156,14 @@ class SignupScreen extends StatelessWidget {
                 PrimaryButton(
                   text: "Create Account",
                   onPressed: () {
-                    _authcontroller.signUp(
-                      formkey: _formKey,
-                      name: name,
-                      email: email,
-                      password: password,
-                    );
+                    if (_formKey.currentState!.validate()) {
+                      _authcontroller.signUp(
+                        formkey: _formKey,
+                        name: name,
+                        email: email,
+                        password: password,
+                      );
+                    }
                   },
                 ),
 

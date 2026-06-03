@@ -28,7 +28,7 @@ class Authservice extends GetxController {
         id: userCredential.user!.uid,
         name: name,
         email: email,
-        password: password,
+ 
       );
 
       await _firebaseFireStore

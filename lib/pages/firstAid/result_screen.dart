@@ -27,6 +27,7 @@ class FirstAidScreen extends StatelessWidget {
               const TopBar(
                 title: "Injury Analysis",
                 actionIcon: Icons.volume_up_rounded,
+                showBackButton: true,
               ),
 
               const SizedBox(height: 20),

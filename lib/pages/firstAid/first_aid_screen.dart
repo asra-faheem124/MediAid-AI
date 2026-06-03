@@ -11,21 +11,20 @@ class FirstAidScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 12,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
 
           child: Column(
             children: [
               // ================= TOP BAR =================
-
-             TopBar(title: "First Aid Instructions", actionIcon: Icons.volume_up_rounded),
+              TopBar(
+                title: "First Aid Instructions",
+                actionIcon: Icons.volume_up_rounded,
+                showBackButton: true,
+              ),
 
               const SizedBox(height: 20),
 
               // ================= TAB BAR =================
-
               Container(
                 height: 50,
                 padding: const EdgeInsets.all(5),
@@ -38,7 +37,6 @@ class FirstAidScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     // ACTIVE TAB
-
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
@@ -86,7 +84,6 @@ class FirstAidScreen extends StatelessWidget {
               const SizedBox(height: 28),
 
               // ================= STEPS LIST =================
-
               Expanded(
                 child: ListView(
                   children: const [
@@ -132,7 +129,6 @@ class FirstAidScreen extends StatelessWidget {
               ),
 
               // ================= VOICE GUIDE BUTTON =================
-
               SizedBox(
                 width: double.infinity,
                 height: 58,
@@ -154,10 +150,7 @@ class FirstAidScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
 
-                  label: Text(
-                    "Voice Guide",
-                    style: AppTextStyles.button,
-                  ),
+                  label: Text("Voice Guide", style: AppTextStyles.button),
                 ),
               ),
             ],
@@ -193,7 +186,6 @@ class StepTile extends StatelessWidget {
 
       children: [
         // ================= STEP NUMBER =================
-
         Container(
           height: 38,
           width: 38,
@@ -218,17 +210,12 @@ class StepTile extends StatelessWidget {
         const SizedBox(width: 16),
 
         // ================= CONTENT =================
-
         Expanded(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
-              Icon(
-                icon,
-                color: ColorConstants.primary,
-                size: 28,
-              ),
+              Icon(icon, color: ColorConstants.primary, size: 28),
 
               const SizedBox(width: 14),
 
@@ -249,9 +236,7 @@ class StepTile extends StatelessWidget {
 
                     Text(
                       description,
-                      style: AppTextStyles.body.copyWith(
-                        fontSize: 14,
-                      ),
+                      style: AppTextStyles.body.copyWith(fontSize: 14),
                     ),
                   ],
                 ),

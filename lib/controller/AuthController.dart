@@ -59,18 +59,7 @@ class Authcontroller extends GetxController {
     required email,
     required password,
   }) async {
-    // if (email.text.isEmpty || password.text.isEmpty) {
-    //   AppSnackbar.error(
-    //     Get.context!,
-    //     'Please fill out all the fields correctly.',
-    //   );
-    //   return;
-    // }
-
-    // if (!formkey.currentState!.validate()) {
-    //   AppSnackbar.error(Get.context!, 'Invalid credentials');
-    //   return;
-    // }
+  
 
     String userEmail = email.text.trim();
     String userPassword = password.text.trim();

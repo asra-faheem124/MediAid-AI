@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         scaffoldBackgroundColor: ColorConstants.background,
       ),
-      home: LoginScreen(),
+      home: LoginScreen()
     );
   }
 }

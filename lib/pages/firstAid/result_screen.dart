@@ -7,8 +7,8 @@ import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/components/top_bar.dart';
 import 'package:mediaid_ui/pages/firstAid/emergency_screen.dart';
 
-class FirstAidScreen extends StatelessWidget {
-  const FirstAidScreen({super.key});
+class ResultScreen extends StatelessWidget {
+  const ResultScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

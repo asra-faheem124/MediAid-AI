@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/cards.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
@@ -10,52 +12,129 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 12,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
-            // ================= TOP BAR =================
+            // ================= TOP SECTION =================
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.menu_rounded),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user != null ? "Hello 👋" : "Welcome to",
+                      style: AppTextStyles.body,
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    Text(
+                      user != null
+                          ? (user.displayName ?? "User")
+                          : "MediAid AI",
+                      style: AppTextStyles.title,
+                    ),
+                  ],
                 ),
 
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.notifications_none_rounded),
-                ),
+                user == null
+                    ? SizedBox(
+                        width: 120,
+                        child: SecondaryButtons(
+                          text: "Login",
+                          onPressed: () {
+                            Get.toNamed('/login');
+                          },
+                        ),
+                      )
+                    : PopupMenuButton<String>(
+                        offset: const Offset(0, 50),
+
+                        icon: CircleAvatar(
+                          radius: 22,
+                          backgroundColor: ColorConstants.primary,
+                          child: Text(
+                            user.displayName != null &&
+                                    user.displayName!.isNotEmpty
+                                ? user.displayName![0].toUpperCase()
+                                : "U",
+                            style: AppTextStyles.button,
+                          ),
+                        ),
+
+                        onSelected: (value) async {
+                          switch (value) {
+                            case "profile":
+                              Get.toNamed('/profile');
+                              break;
+
+                            case "history":
+                              Get.toNamed('/history');
+                              break;
+
+                            case "logout":
+                              await FirebaseAuth.instance.signOut();
+
+                              Get.offAllNamed('/login');
+                              break;
+                          }
+                        },
+
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: "profile",
+                            child: Text("Profile"),
+                          ),
+
+                          const PopupMenuItem(
+                            value: "history",
+                            child: Text("Scan History"),
+                          ),
+
+                          const PopupMenuItem(
+                            value: "logout",
+                            child: Text("Logout"),
+                          ),
+                        ],
+                      ),
               ],
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 24),
 
-            // ================= GREETING =================
-            Text("Hello, User 👋", style: AppTextStyles.title),
+            // ================= SUBTITLE =================
 
-            const SizedBox(height: 5),
-
-            Text("How can we help you today?", style: AppTextStyles.body),
+            Text(
+              "How can we help you today?",
+              style: AppTextStyles.body,
+            ),
 
             const SizedBox(height: 24),
 
             // ================= SCAN CARD =================
+
             ScanCard(
               onTap: () {
-                Get.to(ProcessingScreen());
+                Get.to(
+                  () => const ProcessingScreen(),
+                );
               },
             ),
 
             const SizedBox(height: 18),
 
             // ================= ACTION CARDS =================
+
             Row(
               children: [
                 Expanded(
@@ -63,7 +142,9 @@ class HomeScreen extends StatelessWidget {
                     icon: Icons.history,
                     title: "View History",
                     iconColor: ColorConstants.primary,
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed('/history');
+                    },
                   ),
                 ),
 
@@ -83,6 +164,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 18),
 
             // ================= SAFETY CARD =================
+
             const SafetyCard(),
           ],
         ),

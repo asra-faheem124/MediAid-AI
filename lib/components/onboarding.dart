@@ -61,7 +61,7 @@ class OnboardingComponent extends StatelessWidget {
 
               // Illustration
               SizedBox(
-                height: 380,
+                height: 340,
 
                 child: Stack(
                   alignment: Alignment.center,
@@ -84,12 +84,12 @@ class OnboardingComponent extends StatelessWidget {
                     ),
 
                     // Person Image
-                    Image.asset(imagePath, height: 320),
+                    Image.asset(imagePath, height: 280),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
 
               // Heading
               RichText(

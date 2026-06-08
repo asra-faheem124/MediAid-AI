@@ -168,7 +168,7 @@ class LoginScreen extends StatelessWidget {
                 SocialLoginButton(
                   text: "Continue with Google",
                   icon: Icons.g_mobiledata_rounded,
-                  onPressed: () {},
+                  onPressed: () => _authcontroller.loginWithGoogle(),
                 ),
 
                 const SizedBox(height: 40),

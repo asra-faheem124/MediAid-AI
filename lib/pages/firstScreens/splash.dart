@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:mediaid_ui/pages/firstScreens/welcome_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mediaid_ui/components/bottom_navigation_bar.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
-import 'package:mediaid_ui/pages/firstScreens/onboarding_one.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,20 +17,66 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  User? user = FirebaseAuth.instance.currentUser;
+
+  // Animated loading bar width (0.0 → 1.0)
+  double _loadingProgress = 0.0;
+
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
-      LoggedIn(context);
+    _startLoadingAnimation();
+
+    // Navigate after 3 seconds
+    Timer(const Duration(seconds: 3), () {
+      _decideNavigation();
     });
   }
 
-  Future<void> LoggedIn(BuildContext context) async {
+  // Animate the loading bar smoothly
+  void _startLoadingAnimation() {
+    Timer.periodic(const Duration(milliseconds: 30), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      setState(() {
+        _loadingProgress += 0.01;
+        if (_loadingProgress >= 1.0) {
+          _loadingProgress = 1.0;
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  Future<void> _decideNavigation() async {
+    // 1. Check if Firebase has an active session
+    User? user = FirebaseAuth.instance.currentUser;
+
     if (user != null) {
+      // Online + Firebase session active → go home
+      Get.offAll(() => BottomNavBar());
+      return;
+    }
+
+    // 2. No Firebase session → check if offline but was logged in before
+    final prefs = await SharedPreferences.getInstance();
+    final bool wasLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    final bool wasGuest = prefs.getBool('isGuest') ?? false;
+
+    // 3. Check connectivity
+    final connectivityResult = await Connectivity().checkConnectivity();
+    final bool isOffline = connectivityResult == ConnectivityResult.none;
+
+    if (isOffline && wasLoggedIn) {
+      // Was logged in before, now offline → trust cached session, go home
+      Get.offAll(() => BottomNavBar());
+    } else if (wasGuest) {
+      // Was using as guest → go directly home (guests always go home)
       Get.offAll(() => BottomNavBar());
     } else {
-      Get.off(() => OnboardingScreenOne());
+      // New user or logged out → show onboarding
+      Get.offAll(() => WelcomeScreen());
     }
   }
 
@@ -39,18 +87,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
       body: Stack(
         children: [
-          // Bottom Background Shapes
+          // Bottom Background Shapes (unchanged — your original UI)
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
-
             child: Container(
               height: 170,
-
               decoration: BoxDecoration(
                 color: ColorConstants.primary.withValues(alpha: 0.2),
-
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(120),
                   topRight: Radius.circular(120),
@@ -62,11 +107,9 @@ class _SplashScreenState extends State<SplashScreen> {
           Positioned(
             bottom: -20,
             left: -40,
-
             child: Container(
               width: 240,
               height: 120,
-
               decoration: BoxDecoration(
                 color: ColorConstants.primary.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(100),
@@ -77,11 +120,9 @@ class _SplashScreenState extends State<SplashScreen> {
           Positioned(
             bottom: -25,
             right: -30,
-
             child: Container(
               width: 230,
               height: 120,
-
               decoration: BoxDecoration(
                 color: ColorConstants.primaryLight.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(100),
@@ -89,36 +130,28 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
 
-          // Main Content
+          // Main Content (unchanged UI)
           SafeArea(
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-
                 children: [
                   // Logo Box
                   Container(
                     width: 125,
                     height: 125,
-
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-
                       boxShadow: [
                         BoxShadow(
-                          color: ColorConstants.primaryLight.withValues(
-                            alpha: 0.5,
-                          ),
-
+                          color: ColorConstants.primaryLight.withValues(alpha: 0.5),
                           blurRadius: 25,
                           offset: const Offset(0, 10),
                         ),
                       ],
                     ),
-
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
-
                       child: Image.asset(
                         "assets/images/Mediaid AI Logo.png",
                         fit: BoxFit.cover,
@@ -128,10 +161,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
                   const SizedBox(height: 35),
 
-                  // App Name
                   const Text(
                     "MediAid AI",
-
                     style: TextStyle(
                       fontSize: 34,
                       fontWeight: FontWeight.bold,
@@ -142,7 +173,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
                   const SizedBox(height: 10),
 
-                  // Subtitle
                   const Text(
                     "Smart First Aid Assistant",
                     style: AppTextStyles.subHeading,
@@ -150,22 +180,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
                   const SizedBox(height: 60),
 
-                  // Loading Bar
+                  // ✅ Animated Loading Bar (replaces static one)
                   Container(
                     width: 120,
                     height: 6,
-
                     decoration: BoxDecoration(
                       color: ColorConstants.border,
                       borderRadius: BorderRadius.circular(20),
                     ),
-
                     child: Align(
                       alignment: Alignment.centerLeft,
-
-                      child: Container(
-                        width: 60,
-
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 30),
+                        width: 120 * _loadingProgress, // dynamic width
                         decoration: BoxDecoration(
                           color: ColorConstants.primary,
                           borderRadius: BorderRadius.circular(20),

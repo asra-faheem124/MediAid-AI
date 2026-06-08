@@ -4,14 +4,18 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mediaid_ui/components/constants.dart';
+import 'package:mediaid_ui/controller/AuthController.dart';
 import 'package:mediaid_ui/firebase_options.dart';
-import 'package:mediaid_ui/pages/auth/login_screen.dart';
 import 'package:mediaid_ui/pages/firstScreens/splash.dart';
+import 'package:mediaid_ui/services/AuthService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  Get.put(Authservice());
+  Get.put(Authcontroller());
 
   runApp(const MyApp());
 }
@@ -30,7 +34,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         scaffoldBackgroundColor: ColorConstants.background,
       ),
-      home: SplashScreen()
+      home: SplashScreen(),
     );
   }
 }

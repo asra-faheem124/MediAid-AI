@@ -9,80 +9,95 @@ import 'package:mediaid_ui/services/AuthService.dart';
 
 class Authcontroller extends GetxController {
   var isVisible = false.obs;
+  var isConfirmVisible = false.obs; // ✅ for confirm password field
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final Authservice _authservice = Get.find<Authservice>(); // ✅ find not put
 
-  final Authservice _authservice = Get.put(Authservice());
-
+  // ─── Sign Up ─────────────────────────────────────────
   Future<void> signUp({
     required GlobalKey<FormState> formkey,
     required name,
     required email,
     required password,
   }) async {
-    if (!formkey.currentState!.validate()) {
-      AppSnackbar.error(Get.context!, 'Invalid credentials');
-    } else {
-      String username = name.text.trim();
-      String useremail = email.text.trim();
-      String userpassword = password.text.trim();
+    if (!formkey.currentState!.validate()) return;
 
-      try {
-        EasyLoading.show(status: "Registering...");
-        UserCredential? userCredential = await _authservice.SignUpMethod(
-          username,
-          useremail,
-          userpassword,
+    String username = name.text.trim();
+    String useremail = email.text.trim();
+    String userpassword = password.text.trim();
+
+    try {
+      UserCredential? userCredential = await _authservice.SignUpMethod(
+        username,
+        useremail,
+        userpassword,
+      );
+
+      if (userCredential != null) {
+        AppSnackbar.success(
+          Get.context!,
+          'Registered! Please verify your email to login.',
         );
-        EasyLoading.dismiss();
-        if (userCredential != null) {
-          AppSnackbar.success(
-            Get.context!,
-            'Register Successfully! Please verify your email to login',
-          );
-          Get.to(LoginScreen());
-        } else {
-          AppSnackbar.error(
-            Get.context!,
-            'Something went wrong please try again',
-          );
-        }
-      } catch (e) {
-        EasyLoading.dismiss();
-        print('Error $e');
-        // AppSnackbar.error(Get.context!, '$e');
+        Get.offAll(() => LoginScreen());
       }
+    } catch (e) {
+      EasyLoading.dismiss();
+      AppSnackbar.error(Get.context!, 'Something went wrong. Try again.');
     }
   }
 
+  // ─── Login ───────────────────────────────────────────
   Future<void> login({
     required GlobalKey<FormState> formkey,
     required email,
     required password,
   }) async {
-  
+    if (!formkey.currentState!.validate()) return;
 
     String userEmail = email.text.trim();
     String userPassword = password.text.trim();
+
     UserCredential? userCredential = await _authservice.LogInMethod(
       email: userEmail,
       password: userPassword,
     );
 
     if (userCredential == null) return;
-    if (!userCredential.user!.emailVerified) {
-      AppSnackbar.error(Get.context!, 'Please Verify Your Email');
 
+    if (!userCredential.user!.emailVerified) {
+      AppSnackbar.error(Get.context!, 'Please verify your email first.');
       return;
     }
-    AppSnackbar.success(Get.context!, 'Login Successful');
-    Get.offAll(BottomNavBar());
+
+    AppSnackbar.success(Get.context!, 'Login Successful!');
+    Get.offAll(() => BottomNavBar());
   }
 
+  // ─── Google Sign In ──────────────────────────────────
+  Future<void> loginWithGoogle() async {
+    try {
+      UserCredential? userCredential = await _authservice.signInWithGoogle();
+
+      if (userCredential != null) {
+        AppSnackbar.success(Get.context!, 'Welcome!');
+        Get.offAll(() => BottomNavBar());
+      }
+    } catch (e) {
+      AppSnackbar.error(Get.context!, 'Google sign-in failed. Try again.');
+    }
+  }
+
+  // ─── Logout ──────────────────────────────────────────
+  Future<void> logout() async {
+    await _authservice.LogOut(); // clears Firebase + shared prefs
+    Get.offAll(() => LoginScreen());
+  }
+
+  // ─── Forgot Password ─────────────────────────────────
   Future<void> forgetPassword(String useremail) async {
     try {
       EasyLoading.show(status: 'Please wait');
       await _firebaseAuth.sendPasswordResetEmail(email: useremail);
-      update();
       EasyLoading.dismiss();
       AppSnackbar.success(
         Get.context!,

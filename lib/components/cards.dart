@@ -241,3 +241,44 @@ class RecommendationCard extends StatelessWidget {
     );
   }
 }
+
+// ── Illustration / Tagline Card ──────────
+class TaglineCard extends StatelessWidget {
+  const TaglineCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: ColorConstants.primary.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: ColorConstants.primary.withValues(alpha: 0.15),
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.health_and_safety_rounded,
+            size: 52,
+            color: ColorConstants.primary,
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            "Instant First Aid Guidance",
+            style: AppTextStyles.title,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            "Scan any injury and get smart, step-by-step first aid instructions — even without internet.",
+            style: AppTextStyles.lightBody,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}

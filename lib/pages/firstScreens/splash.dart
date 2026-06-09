@@ -50,21 +50,19 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _decideNavigation() async {
-    // 1. Check if Firebase has an active session
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      // Online + Firebase session active → go home
       Get.offAll(() => BottomNavBar());
       return;
     }
 
-    // 2. No Firebase session → check if offline but was logged in before
+    // No Firebase session → check if offline but was logged in before
     final prefs = await SharedPreferences.getInstance();
     final bool wasLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     final bool wasGuest = prefs.getBool('isGuest') ?? false;
 
-    // 3. Check connectivity
+    // Check connectivity
     final connectivityResult = await Connectivity().checkConnectivity();
     final bool isOffline = connectivityResult == ConnectivityResult.none;
 
@@ -87,7 +85,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
       body: Stack(
         children: [
-          // Bottom Background Shapes (unchanged — your original UI)
           Positioned(
             bottom: 0,
             left: 0,
@@ -129,8 +126,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
           ),
-
-          // Main Content (unchanged UI)
+          // main content
           SafeArea(
             child: Center(
               child: Column(
@@ -180,7 +176,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
                   const SizedBox(height: 60),
 
-                  // ✅ Animated Loading Bar (replaces static one)
+                  // Animated Loading Bar
                   Container(
                     width: 120,
                     height: 6,

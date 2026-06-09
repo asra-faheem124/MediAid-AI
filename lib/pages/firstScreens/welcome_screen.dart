@@ -48,7 +48,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
           ),
 
-          // ── Bottom decorative shapes (matches splash) ──
+          // ── Bottom decorative shapes 
           Positioned(
             bottom: 0,
             left: 0,
@@ -91,7 +91,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
           ),
 
-          // ── Main Content ───────────────────────────────
+          // Main Content 
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -100,7 +100,7 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 48),
 
-                  // ── Logo ────────────────────────────────
+                  // Logo
                   Container(
                     width: 100,
                     height: 100,
@@ -127,7 +127,7 @@ class WelcomeScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // ── App Name ────────────────────────────
+                  // App Name 
                   const Text("MediAid AI", style: AppTextStyles.heading),
 
                   const SizedBox(height: 8),
@@ -139,21 +139,21 @@ class WelcomeScreen extends StatelessWidget {
 
                   const SizedBox(height: 48),
 
-                  // ── Feature Pills ────────────────────────
+                  // Feature Pills 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _FeaturePill(
+                      FeaturePill(
                         icon: Icons.wifi_off_rounded,
                         label: "Works Offline",
                       ),
                       const SizedBox(width: 10),
-                      _FeaturePill(
+                      FeaturePill(
                         icon: Icons.bolt_rounded,
                         label: "AI Powered",
                       ),
                       const SizedBox(width: 10),
-                      _FeaturePill(
+                      FeaturePill(
                         icon: Icons.shield_outlined,
                         label: "Reliable",
                       ),
@@ -162,12 +162,12 @@ class WelcomeScreen extends StatelessWidget {
 
                   const SizedBox(height: 48),
 
-                  // ── Illustration / Tagline Card ──────────
+                  // Illustration / Tagline Card
                  TaglineCard(),
 
                   const Spacer(),
 
-                  // ── Buttons ──────────────────────────────
+                  // Buttons
                   PrimaryButton(
                     text: "Get Started",
                     onPressed: () => Get.to(() => SignupScreen()),
@@ -182,7 +182,7 @@ class WelcomeScreen extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  // ── Guest Mode ───────────────────────────
+                  // Guest Mode
                   GestureDetector(
                     onTap: () async {
                       await authService.continueAsGuest();
@@ -212,7 +212,7 @@ class WelcomeScreen extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  // ── Disclaimer ───────────────────────────
+                  // Disclaimer
                   const Text(
                     "⚠️ This app provides basic first aid guidance only.\nNot a replacement for professional medical care.",
                     style: AppTextStyles.caption,
@@ -230,38 +230,3 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
-// ── Feature Pill Widget ──────────────────────────────────
-class _FeaturePill extends StatelessWidget {
-  final IconData icon;
-  final String label;
-
-  const _FeaturePill({required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: ColorConstants.primary.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: ColorConstants.primary.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: ColorConstants.primary),
-          const SizedBox(width: 5),
-          Text(
-            label,
-            style: AppTextStyles.caption.copyWith(
-              color: ColorConstants.primary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

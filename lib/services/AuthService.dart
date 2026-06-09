@@ -131,7 +131,9 @@ Future<UserCredential?> signInWithGoogle() async {
   try {
     EasyLoading.show(status: 'Please Wait');
 
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleUser = await GoogleSignIn(
+  clientId: '686808185076-k6on85pc8u73urm0ne2cqaun4gmd9k4c.apps.googleusercontent.com', // for web
+).signIn();
 
     if (googleUser == null) {
       EasyLoading.dismiss();
@@ -176,10 +178,18 @@ Future<UserCredential?> signInWithGoogle() async {
   } on FirebaseAuthException catch (e) {
     EasyLoading.dismiss();
     AppSnackbar.error(Get.context!, e.message ?? 'Some error occurred');
-  } catch (e) {
-    EasyLoading.dismiss();
-    AppSnackbar.error(Get.context!, 'Google sign-in failed. Try again.');
-  }
+  } catch (e, s) {
+  EasyLoading.dismiss();
+  print("========================");
+  print(e);
+  print(s);
+  print("========================");
+
+  AppSnackbar.error(
+    Get.context!,
+    "Google Sign-In Failed\n$e",
+  );
+}
   return null;
 }
 

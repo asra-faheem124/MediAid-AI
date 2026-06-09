@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mediaid_ui/pages/firstAid/history_screen.dart';
+import 'package:mediaid_ui/pages/profile/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/cards.dart';
@@ -18,7 +20,7 @@ class HomeScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     final Authcontroller authController = Get.find<Authcontroller>();
 
-    // ✅ Detect guest mode from shared prefs
+    // Detect guest mode from shared prefs
     // We use a FutureBuilder to read guest state
     return FutureBuilder<bool>(
       future: _isGuest(),
@@ -52,8 +54,8 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
 
-                    // ✅ Guest → show Login button
-                    // ✅ Logged in → show avatar + menu
+                    // Guest → show Login button
+                    // Logged in → show avatar + menu
                     isGuest
                         ? SizedBox(
                             width: 120,
@@ -80,13 +82,12 @@ class HomeScreen extends StatelessWidget {
                             onSelected: (value) async {
                               switch (value) {
                                 case "profile":
-                                  // Get.to(() => ProfileScreen());
+                                  Get.to(() => ProfileScreen());
                                   break;
                                 case "history":
-                                  // Get.to(() => HistoryScreen());
+                                  Get.to(() => HistoryScreen());
                                   break;
                                 case "logout":
-                                  // ✅ Uses controller logout (clears session)
                                   await authController.logout();
                                   break;
                               }

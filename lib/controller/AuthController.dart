@@ -9,9 +9,9 @@ import 'package:mediaid_ui/services/AuthService.dart';
 
 class Authcontroller extends GetxController {
   var isVisible = false.obs;
-  var isConfirmVisible = false.obs; // ✅ for confirm password field
+  var isConfirmVisible = false.obs;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final Authservice _authservice = Get.find<Authservice>(); // ✅ find not put
+  final Authservice _authservice = Get.find<Authservice>(); 
 
   // ─── Sign Up ─────────────────────────────────────────
   Future<void> signUp({
@@ -75,17 +75,22 @@ class Authcontroller extends GetxController {
 
   // ─── Google Sign In ──────────────────────────────────
   Future<void> loginWithGoogle() async {
-    try {
-      UserCredential? userCredential = await _authservice.signInWithGoogle();
+  try {
+    UserCredential? userCredential =
+        await _authservice.signInWithGoogle();
 
-      if (userCredential != null) {
-        AppSnackbar.success(Get.context!, 'Welcome!');
-        Get.offAll(() => BottomNavBar());
-      }
-    } catch (e) {
-      AppSnackbar.error(Get.context!, 'Google sign-in failed. Try again.');
+    if (userCredential != null) {
+      AppSnackbar.success(Get.context!, 'Welcome!');
+      Get.offAll(() => BottomNavBar());
     }
+  } catch (e) {
+    print("Google Sign In Error: $e");
+    AppSnackbar.error(
+      Get.context!,
+      "Google Sign-In Failed\n$e",
+    );
   }
+}
 
   // ─── Logout ──────────────────────────────────────────
   Future<void> logout() async {

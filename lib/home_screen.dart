@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mediaid_ui/pages/firstAid/history_screen.dart';
+import 'package:mediaid_ui/pages/firstAid/scan_screen.dart';
 import 'package:mediaid_ui/pages/profile/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mediaid_ui/components/buttons.dart';
@@ -9,7 +10,6 @@ import 'package:mediaid_ui/components/cards.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/controller/AuthController.dart';
-import 'package:mediaid_ui/pages/firstAid/processing_screen.dart';
 import 'package:mediaid_ui/pages/firstScreens/welcome_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -119,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                 // ================= SCAN CARD =================
                 ScanCard(
                   onTap: () {
-                    Get.to(() => const ProcessingScreen());
+                    Get.to(() => ScanScreen());
                   },
                 ),
 

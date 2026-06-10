@@ -43,6 +43,8 @@ dependencies:
   firebase_storage: ^13.4.1
   firebase_database: ^12.4.1
   flutter_easyloading: ^3.0.5
+  image_picker: ^1.1.2
+  http: ^1.2.1
    # Google Sign In (optional but impressive)
   google_sign_in: ^6.2.1
 

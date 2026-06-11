@@ -22,32 +22,32 @@ class _SplashScreenState extends State<SplashScreen> {
   double _loadingProgress = 0.0;
 
   @override
-  void initState() {
-    super.initState();
-    _startLoadingAnimation();
+void initState() {
+  super.initState();
+  _startLoadingAnimation();
+}
 
-    // Navigate after 3 seconds
-    Timer(const Duration(seconds: 3), () {
-      _decideNavigation();
-    });
-  }
+// Animate loading bar AND navigate when complete
+void _startLoadingAnimation() {
+  Timer.periodic(const Duration(milliseconds: 30), (timer) {
+    if (!mounted) {
+      timer.cancel();
+      return;
+    }
 
-  // Animate the loading bar smoothly
-  void _startLoadingAnimation() {
-    Timer.periodic(const Duration(milliseconds: 30), (timer) {
-      if (!mounted) {
+    setState(() {
+      _loadingProgress += 0.02; // faster & smoother
+
+      if (_loadingProgress >= 1.0) {
+        _loadingProgress = 1.0;
         timer.cancel();
-        return;
+
+        // Navigate ONLY when loading finishes
+        _decideNavigation();
       }
-      setState(() {
-        _loadingProgress += 0.01;
-        if (_loadingProgress >= 1.0) {
-          _loadingProgress = 1.0;
-          timer.cancel();
-        }
-      });
     });
-  }
+  });
+}
 
   Future<void> _decideNavigation() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -134,15 +134,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 children: [
                   // Logo Box
                   Container(
-                    width: 125,
-                    height: 125,
+                    width: 155,
+                    height: 155,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color: ColorConstants.primaryLight.withValues(alpha: 0.5),
+                          color: ColorConstants.primaryLight.withValues(alpha: 0.3),
                           blurRadius: 25,
-                          offset: const Offset(0, 10),
                         ),
                       ],
                     ),
@@ -150,24 +149,11 @@ class _SplashScreenState extends State<SplashScreen> {
                       borderRadius: BorderRadius.circular(30),
                       child: Image.asset(
                         "assets/images/Mediaid AI Logo.png",
-                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 35),
-
-                  const Text(
-                    "MediAid AI",
-                    style: TextStyle(
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                      color: ColorConstants.primary,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
 
                   const Text(
                     "Smart First Aid Assistant",
@@ -187,7 +173,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 30),
+                        duration: const Duration(milliseconds: 20),
                         width: 120 * _loadingProgress, // dynamic width
                         decoration: BoxDecoration(
                           color: ColorConstants.primary,

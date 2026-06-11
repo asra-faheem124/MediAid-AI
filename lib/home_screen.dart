@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mediaid_ui/pages/auth/login_screen.dart';
 import 'package:mediaid_ui/pages/firstAid/history_screen.dart';
 import 'package:mediaid_ui/pages/firstAid/scan_screen.dart';
 import 'package:mediaid_ui/pages/profile/profile_screen.dart';
@@ -20,12 +21,14 @@ class HomeScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     final Authcontroller authController = Get.find<Authcontroller>();
 
-    // Detect guest mode from shared prefs
-    // We use a FutureBuilder to read guest state
     return FutureBuilder<bool>(
       future: _isGuest(),
       builder: (context, snapshot) {
         final bool isGuest = snapshot.data ?? false;
+
+        final String initial = (user?.displayName?.isNotEmpty ?? false)
+            ? user!.displayName![0].toUpperCase()
+            : "U";
 
         return SafeArea(
           child: Padding(
@@ -37,6 +40,7 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // Greeting Section
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -54,30 +58,33 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
 
-                    // Guest → show Login button
-                    // Logged in → show avatar + menu
+                    // LOGIN or AVATAR MENU
                     isGuest
                         ? SizedBox(
-                            width: 120,
+                            width: 100,
+                            height: 40,
                             child: SecondaryButtons(
                               text: "Login",
                               onPressed: () {
-                                Get.offAll(() => const WelcomeScreen());
+                                Get.offAll(() => LoginScreen());
                               },
                             ),
                           )
                         : PopupMenuButton<String>(
-                            offset: const Offset(0, 50),
+                            offset: const Offset(0, 55),
+                            color: ColorConstants.background,
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(
+                                color: ColorConstants.border,
+                                width: 1,
+                              ),
+                            ),
                             icon: CircleAvatar(
                               radius: 22,
                               backgroundColor: ColorConstants.primary,
-                              child: Text(
-                                user?.displayName != null &&
-                                        user!.displayName!.isNotEmpty
-                                    ? user.displayName![0].toUpperCase()
-                                    : "U",
-                                style: AppTextStyles.button,
-                              ),
+                              child: Text(initial, style: AppTextStyles.button),
                             ),
                             onSelected: (value) async {
                               switch (value) {
@@ -92,18 +99,23 @@ class HomeScreen extends StatelessWidget {
                                   break;
                               }
                             },
-                            itemBuilder: (context) => const [
-                              PopupMenuItem(
+                            itemBuilder: (context) => [
+                              _buildMenuItem(
                                 value: "profile",
-                                child: Text("Profile"),
+                                icon: Icons.person_outline,
+                                title: "Profile",
                               ),
-                              PopupMenuItem(
+                              _buildMenuItem(
                                 value: "history",
-                                child: Text("Scan History"),
+                                icon: Icons.history,
+                                title: "Scan History",
                               ),
-                              PopupMenuItem(
+                              const PopupMenuDivider(height: 8),
+                              _buildMenuItem(
                                 value: "logout",
-                                child: Text("Logout"),
+                                icon: Icons.logout,
+                                title: "Logout",
+                                isDestructive: true,
                               ),
                             ],
                           ),
@@ -134,7 +146,7 @@ class HomeScreen extends StatelessWidget {
                         title: "View History",
                         iconColor: ColorConstants.primary,
                         onTap: () {
-                          // Get.to(() => HistoryScreen());
+                          Get.to(() => HistoryScreen());
                         },
                       ),
                     ),
@@ -162,9 +174,43 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // ✅ Read guest state from shared preferences
+  // ================= GUEST CHECK =================
   Future<bool> _isGuest() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool('isGuest') ?? false;
   }
+}
+
+// ================= POPUP MENU ITEM BUILDER =================
+
+PopupMenuItem<String> _buildMenuItem({
+  required String value,
+  required IconData icon,
+  required String title,
+  bool isDestructive = false,
+}) {
+  return PopupMenuItem<String>(
+    value: value,
+    child: Row(
+      children: [
+        Icon(
+          icon,
+          size: 20,
+          color: isDestructive
+              ? ColorConstants.danger
+              : ColorConstants.primaryDark,
+        ),
+        const SizedBox(width: 12),
+        Text(
+          title,
+          style: AppTextStyles.body.copyWith(
+            color: isDestructive
+                ? ColorConstants.danger
+                : ColorConstants.heading,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    ),
+  );
 }

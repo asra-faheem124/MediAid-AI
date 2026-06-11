@@ -318,3 +318,86 @@ class FeaturePill extends StatelessWidget {
     );
   }
 }
+
+// ================= CATEGORY CARD =========================
+
+class GuideCategoryCard extends StatelessWidget {
+  final String icon;
+  final String title;
+  final String subtitle;
+
+  const GuideCategoryCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+
+        border: Border.all(
+          color: ColorConstants.border,
+        ),
+      ),
+
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+
+        children: [
+          // ================= ICON =================
+
+          Container(
+            height: 80,
+            width: 80,
+
+            decoration: BoxDecoration(
+              color: ColorConstants.primary.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+
+            child: Center(
+              child: Text(
+                icon,
+                style: const TextStyle(fontSize: 32),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          // ================= TITLE =================
+
+          Text(
+            title,
+
+            style: AppTextStyles.subHeading.copyWith(
+              color: ColorConstants.heading,
+              fontSize: 17,
+            ),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 6),
+
+          // ================= SUBTITLE =================
+
+          Text(
+            subtitle,
+
+            style: AppTextStyles.lightBody.copyWith(
+              fontSize: 13,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}

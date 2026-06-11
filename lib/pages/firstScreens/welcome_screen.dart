@@ -19,212 +19,214 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorConstants.background,
 
-      body: Stack(
-        children: [
-          // ── Top decorative circle ──────────────────────
-          Positioned(
-            top: -60,
-            right: -50,
-            child: Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: ColorConstants.primary.withValues(alpha: 0.08),
-              ),
-            ),
-          ),
-
-          Positioned(
-            top: 40,
-            right: 20,
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: ColorConstants.primaryLight.withValues(alpha: 0.12),
-              ),
-            ),
-          ),
-
-          // ── Bottom decorative shapes 
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 170,
-              decoration: BoxDecoration(
-                color: ColorConstants.primary.withValues(alpha: 0.07),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(120),
-                  topRight: Radius.circular(120),
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            // ── Top decorative circle ──────────────────────
+            Positioned(
+              top: -60,
+              right: -50,
+              child: Container(
+                width: 220,
+                height: 220,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: ColorConstants.primary.withValues(alpha: 0.08),
                 ),
               ),
             ),
-          ),
-
-          Positioned(
-            bottom: -20,
-            left: -40,
-            child: Container(
-              width: 240,
-              height: 120,
-              decoration: BoxDecoration(
-                color: ColorConstants.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(100),
+        
+            Positioned(
+              top: 40,
+              right: 20,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: ColorConstants.primaryLight.withValues(alpha: 0.12),
+                ),
               ),
             ),
-          ),
-
-          Positioned(
-            bottom: -25,
-            right: -30,
-            child: Container(
-              width: 230,
-              height: 120,
-              decoration: BoxDecoration(
-                color: ColorConstants.primaryLight.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(100),
+        
+            // ── Bottom decorative shapes 
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 170,
+                decoration: BoxDecoration(
+                  color: ColorConstants.primary.withValues(alpha: 0.07),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(120),
+                    topRight: Radius.circular(120),
+                  ),
+                ),
               ),
             ),
-          ),
-
-          // Main Content 
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 48),
-
-                  // Logo
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(26),
-                      boxShadow: [
-                        BoxShadow(
-                          color: ColorConstants.primaryLight.withValues(
-                            alpha: 0.4,
-                          ),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(26),
-                      child: Image.asset(
-                        "assets/images/Mediaid AI Logo.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // App Name 
-                  const Text("MediAid AI", style: AppTextStyles.heading),
-
-                  const SizedBox(height: 8),
-
-                  const Text(
-                    "Smart First Aid Assistant",
-                    style: AppTextStyles.subHeading,
-                  ),
-
-                  const SizedBox(height: 48),
-
-                  // Feature Pills 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FeaturePill(
-                        icon: Icons.wifi_off_rounded,
-                        label: "Works Offline",
-                      ),
-                      const SizedBox(width: 10),
-                      FeaturePill(
-                        icon: Icons.bolt_rounded,
-                        label: "AI Powered",
-                      ),
-                      const SizedBox(width: 10),
-                      FeaturePill(
-                        icon: Icons.shield_outlined,
-                        label: "Reliable",
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 48),
-
-                  // Illustration / Tagline Card
-                 TaglineCard(),
-
-                  const Spacer(),
-
-                  // Buttons
-                  PrimaryButton(
-                    text: "Get Started",
-                    onPressed: () => Get.to(() => SignupScreen()),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  SecondaryButtons(
-                    text: "I already have an account",
-                    onPressed: () => Get.to(() => LoginScreen()),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  // Guest Mode
-                  GestureDetector(
-                    onTap: () async {
-                      await authService.continueAsGuest();
-                      Get.offAll(() => BottomNavBar());
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Continue without account  ",
-                            style: AppTextStyles.lightBody,
-                          ),
-                          Text(
-                            "Guest Mode",
-                            style: AppTextStyles.primaryText.copyWith(
-                              fontSize: 14,
-                              decoration: TextDecoration.underline,
-                              decorationColor: ColorConstants.primary,
+        
+            Positioned(
+              bottom: -20,
+              left: -40,
+              child: Container(
+                width: 240,
+                height: 120,
+                decoration: BoxDecoration(
+                  color: ColorConstants.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+            ),
+        
+            Positioned(
+              bottom: -25,
+              right: -30,
+              child: Container(
+                width: 230,
+                height: 120,
+                decoration: BoxDecoration(
+                  color: ColorConstants.primaryLight.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+            ),
+        
+            // Main Content 
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 48),
+        
+                    // Logo
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(26),
+                        boxShadow: [
+                          BoxShadow(
+                            color: ColorConstants.primaryLight.withValues(
+                              alpha: 0.4,
                             ),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
                           ),
                         ],
                       ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(26),
+                        child: Image.asset(
+                          "assets/images/Mediaid AI Logo.png",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Disclaimer
-                  const Text(
-                    "⚠️ This app provides basic first aid guidance only.\nNot a replacement for professional medical care.",
-                    style: AppTextStyles.caption,
-                    textAlign: TextAlign.center,
-                  ),
-
-                  const SizedBox(height: 24),
-                ],
+        
+                    const SizedBox(height: 24),
+        
+                    // App Name 
+                    const Text("MediAid AI", style: AppTextStyles.heading),
+        
+                    const SizedBox(height: 8),
+        
+                    const Text(
+                      "Smart First Aid Assistant",
+                      style: AppTextStyles.subHeading,
+                    ),
+        
+                    const SizedBox(height: 30),
+        
+                    // Feature Pills 
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FeaturePill(
+                          icon: Icons.wifi_off_rounded,
+                          label: "Works Offline",
+                        ),
+                        const SizedBox(width: 10),
+                        FeaturePill(
+                          icon: Icons.bolt_rounded,
+                          label: "AI Powered",
+                        ),
+                        const SizedBox(width: 10),
+                        FeaturePill(
+                          icon: Icons.shield_outlined,
+                          label: "Reliable",
+                        ),
+                      ],
+                    ),
+        
+                    const SizedBox(height: 30),
+        
+                    // Illustration / Tagline Card
+                   TaglineCard(),
+        
+const SizedBox(height: 40),
+        
+                    // Buttons
+                    PrimaryButton(
+                      text: "Get Started",
+                      onPressed: () => Get.to(() => SignupScreen()),
+                    ),
+        
+                    const SizedBox(height: 12),
+        
+                    SecondaryButtons(
+                      text: "I already have an account",
+                      onPressed: () => Get.to(() => LoginScreen()),
+                    ),
+        
+                    const SizedBox(height: 12),
+        
+                    // Guest Mode
+                    GestureDetector(
+                      onTap: () async {
+                        await authService.continueAsGuest();
+                        Get.offAll(() => BottomNavBar());
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Continue without account  ",
+                              style: AppTextStyles.lightBody,
+                            ),
+                            Text(
+                              "Guest Mode",
+                              style: AppTextStyles.primaryText.copyWith(
+                                fontSize: 14,
+                                decoration: TextDecoration.underline,
+                                decorationColor: ColorConstants.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+        
+                    const SizedBox(height: 16),
+        
+                    // Disclaimer
+                    const Text(
+                      "⚠️ This app provides basic first aid guidance only.\nNot a replacement for professional medical care.",
+                      style: AppTextStyles.caption,
+                      textAlign: TextAlign.center,
+                    ),
+        
+                    const SizedBox(height: 24),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

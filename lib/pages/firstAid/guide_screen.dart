@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mediaid_ui/components/cards.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/components/top_bar.dart';
@@ -88,7 +89,7 @@ class GuideScreen extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 1,
+                  childAspectRatio: 0.8,
 
                   children: const [
                     GuideCategoryCard(
@@ -137,87 +138,3 @@ class GuideScreen extends StatelessWidget {
   }
 }
 
-// =========================================================
-// ================= CATEGORY CARD =========================
-// =========================================================
-
-class GuideCategoryCard extends StatelessWidget {
-  final String icon;
-  final String title;
-  final String subtitle;
-
-  const GuideCategoryCard({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(18),
-
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-
-        border: Border.all(
-          color: ColorConstants.border,
-        ),
-      ),
-
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-
-        children: [
-          // ================= ICON =================
-
-          Container(
-            height: 70,
-            width: 70,
-
-            decoration: BoxDecoration(
-              color: ColorConstants.primary.withValues(alpha: 0.12),
-              shape: BoxShape.circle,
-            ),
-
-            child: Center(
-              child: Text(
-                icon,
-                style: const TextStyle(fontSize: 32),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 18),
-
-          // ================= TITLE =================
-
-          Text(
-            title,
-
-            style: AppTextStyles.subHeading.copyWith(
-              color: ColorConstants.heading,
-              fontSize: 17,
-            ),
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: 6),
-
-          // ================= SUBTITLE =================
-
-          Text(
-            subtitle,
-
-            style: AppTextStyles.lightBody.copyWith(
-              fontSize: 13,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-}

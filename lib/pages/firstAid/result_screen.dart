@@ -1,3 +1,8 @@
+// ============================================================
+// result_screen.dart
+// Displays real model output from ScanController.result
+// ============================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mediaid_ui/components/buttons.dart';
@@ -5,6 +10,8 @@ import 'package:mediaid_ui/components/cards.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/components/top_bar.dart';
+import 'package:mediaid_ui/controller/ScanController.dart';
+import 'package:mediaid_ui/model/resultModel.dart';
 import 'package:mediaid_ui/pages/firstAid/emergency_screen.dart';
 
 class ResultScreen extends StatelessWidget {
@@ -12,18 +19,45 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScanController scanController = Get.find<ScanController>();
+    final ResultModel? result = scanController.result.value;
+
+    // Safety fallback — should never be null here
+    if (result == null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const SizedBox(height: 16),
+              const Text('No result available.'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => Get.back(),
+                child: const Text('Go Back'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // ── Severity color ──────────────────────────────────────────
+    Color severityColor = switch (result.severityLevel) {
+      'severe' => ColorConstants.danger,
+      'moderate' => ColorConstants.warning,
+      'mild' => ColorConstants.success,
+      _ => ColorConstants.success, // none
+    };
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 14,
-          ),
-
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           child: Column(
             children: [
               // ================= TOP BAR =================
-
               const TopBar(
                 title: "Injury Analysis",
                 actionIcon: Icons.volume_up_rounded,
@@ -33,31 +67,26 @@ class ResultScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // ================= BODY =================
-
               Expanded(
                 child: ListView(
                   children: [
-                    // =====================================================
-                    // ================= RESULT SECTION ====================
-                    // =====================================================
-
+                    // ─────────────────────────────────────────────
+                    // DETECTED INJURY CARD
+                    // ─────────────────────────────────────────────
                     ResultInfoCard(
                       title: "Detected Injury",
-                      value: "Burn",
-
+                      value: result.injury, // e.g. "Diabetic Wounds"
                       trailing: Container(
                         height: 54,
                         width: 54,
-
                         decoration: BoxDecoration(
-                          color: Colors.orange.withValues(alpha: 0.12),
+                          color: severityColor.withValues(alpha: 0.12),
                           shape: BoxShape.circle,
                         ),
-
-                        child: const Center(
+                        child: Center(
                           child: Text(
-                            "🔥",
-                            style: TextStyle(fontSize: 26),
+                            result.injuryEmoji,
+                            style: const TextStyle(fontSize: 26),
                           ),
                         ),
                       ),
@@ -65,126 +94,67 @@ class ResultScreen extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    // =====================================================
-                    // =========== CONFIDENCE + SEVERITY ===================
-                    // =====================================================
-
+                    // ─────────────────────────────────────────────
+                    // CONFIDENCE + SEVERITY ROW
+                    // ─────────────────────────────────────────────
                     Row(
                       children: [
                         Expanded(
                           child: ResultInfoCard(
                             title: "Confidence",
-                            value: "87%",
-
+                            value: result.confidencePercent,
                             valueStyle: AppTextStyles.success.copyWith(
                               fontSize: 22,
                             ),
                           ),
                         ),
-
                         const SizedBox(width: 14),
-
                         Expanded(
                           child: ResultInfoCard(
                             title: "Severity",
-                            value: "High",
-
+                            value: _capitalizeFirst(result.severity),
                             valueStyle: AppTextStyles.danger.copyWith(
                               fontSize: 20,
+                              color: severityColor,
                             ),
                           ),
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 16),
 
-                    // =====================================================
-                    // ================= RECOMMENDATION ====================
-                    // =====================================================
-
-                    const RecommendationCard(),
-
-                    const SizedBox(height: 28),
-
-                    // =====================================================
-                    // ================= SECTION TITLE =====================
-                    // =====================================================
-
-                    Align(
-                      alignment: Alignment.centerLeft,
-
-                      child: Text(
-                        "First Aid Instructions",
-
-                        style: AppTextStyles.subHeading.copyWith(
-                          color: ColorConstants.heading,
+                    // ─────────────────────────────────────────────
+                    // DECISION / RECOMMENDATION BANNER
+                    // ─────────────────────────────────────────────
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                      decoration: BoxDecoration(
+                        color: severityColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: severityColor.withValues(alpha: 0.4),
                         ),
                       ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    // =====================================================
-                    // ===================== TAB BAR =======================
-                    // =====================================================
-
-                    Container(
-                      height: 50,
-                      padding: const EdgeInsets.all(5),
-
-                      decoration: BoxDecoration(
-                        color:
-                            ColorConstants.border.withValues(alpha: 0.4),
-
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-
                       child: Row(
                         children: [
-                          // ACTIVE TAB
-
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: ColorConstants.primary,
-
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-
-                              child: Center(
-                                child: Text(
-                                  "Steps",
-
-                                  style: AppTextStyles.body.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ),
+                          Icon(
+                            result.goHospital
+                                ? Icons.local_hospital_rounded
+                                : Icons.home_rounded,
+                            color: severityColor,
+                            size: 24,
                           ),
-
+                          const SizedBox(width: 10),
                           Expanded(
-                            child: Center(
-                              child: Text(
-                                "Do's",
-
-                                style: AppTextStyles.body.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                "Don'ts",
-
-                                style: AppTextStyles.body.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                ),
+                            child: Text(
+                              result.decision,
+                              style: AppTextStyles.body.copyWith(
+                                color: severityColor,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
@@ -194,75 +164,118 @@ class ResultScreen extends StatelessWidget {
 
                     const SizedBox(height: 28),
 
-                    // =====================================================
-                    // ===================== STEPS =========================
-                    // =====================================================
-
-                    const StepTile(
-                      stepNumber: "1",
-                      icon: Icons.water_drop_outlined,
-                      title: "Cool the burn",
-
-                      description:
-                          "Run cool (not cold) water over the burn for 10–20 minutes.",
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    const StepTile(
-                      stepNumber: "2",
-                      icon: Icons.clean_hands_outlined,
-                      title: "Clean gently",
-
-                      description:
-                          "Gently clean the area with mild soap and water.",
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    const StepTile(
-                      stepNumber: "3",
-                      icon: Icons.medication_outlined,
-                      title: "Apply ointment",
-
-                      description:
-                          "Use aloe vera gel or an antibiotic ointment.",
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    const StepTile(
-                      stepNumber: "4",
-                      icon: Icons.health_and_safety_outlined,
-                      title: "Cover it",
-
-                      description:
-                          "Cover the burn with a clean, non-stick bandage or cloth.",
-                    ),
-
-                    const SizedBox(height: 34),
-
-                    // ================= VOICE GUIDE =======================
-                    PrimaryButton(text: "Voice Guide", onPressed: () {}),
-                    
-                    const SizedBox(height: 16),
-
-                    // ================= EMERGENCY BUTTON ==================
-
-                    DangerButton(
-                      text: "Emergency Help",
-                      onPressed: () => Get.to(
-                        const EmergencyScreen(),
+                    // ─────────────────────────────────────────────
+                    // FIRST AID STEPS TITLE
+                    // ─────────────────────────────────────────────
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "First Aid Instructions",
+                        style: AppTextStyles.subHeading.copyWith(
+                          color: ColorConstants.heading,
+                        ),
                       ),
                     ),
 
                     const SizedBox(height: 18),
 
-                    // ================= DISCLAIMER ========================
+                    // ─────────────────────────────────────────────
+                    // STEPS — dynamically built from model output
+                    // ─────────────────────────────────────────────
+                    ...result.firstAidSteps.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final step = entry.value;
 
+                      // Cycle through relevant icons
+                      const stepIcons = [
+                        Icons.water_drop_outlined,
+                        Icons.clean_hands_outlined,
+                        Icons.medication_outlined,
+                        Icons.health_and_safety_outlined,
+                        Icons.warning_amber_rounded,
+                      ];
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: StepTile(
+                          stepNumber: "${index + 1}",
+                          icon: stepIcons[index % stepIcons.length],
+                          title: "Step ${index + 1}",
+                          description: step,
+                        ),
+                      );
+                    }),
+
+                    const SizedBox(height: 10),
+
+                    // ─────────────────────────────────────────────
+                    // OFFLINE / ONLINE BADGE
+                    // ─────────────────────────────────────────────
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          result.isOffline
+                              ? Icons.offline_bolt_rounded
+                              : Icons.cloud_done_rounded,
+                          size: 14,
+                          color: ColorConstants.danger,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          result.isOffline
+                              ? 'Analyzed offline'
+                              : 'Analyzed via server',
+                          style: AppTextStyles.caption,
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // ─────────────────────────────────────────────
+                    // VOICE GUIDE BUTTON
+                    // ─────────────────────────────────────────────
+                    PrimaryButton(
+                      text: "Voice Guide",
+                      onPressed: () {
+                        // TODO: plug in TTS — pass result.firstAidSteps
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // ─────────────────────────────────────────────
+                    // EMERGENCY BUTTON (shown for all, prominent for severe)
+                    // ─────────────────────────────────────────────
+                    DangerButton(
+                      text: "Emergency Help",
+                      onPressed: () => Get.to(const EmergencyScreen()),
+                    ),
+
+                    const SizedBox(height: 18),
+
+                    // ─────────────────────────────────────────────
+                    // SCAN AGAIN
+                    // ─────────────────────────────────────────────
+                    TextButton(
+                      onPressed: () {
+                        scanController.reset();
+                        Get.until((route) => route.isFirst);
+                      },
+                      child: Text(
+                        "Scan Another Injury",
+                        style: AppTextStyles.primaryText,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // ─────────────────────────────────────────────
+                    // DISCLAIMER
+                    // ─────────────────────────────────────────────
                     Text(
                       "This is not a substitute for professional medical advice.",
-
                       textAlign: TextAlign.center,
                       style: AppTextStyles.caption,
                     ),
@@ -277,12 +290,14 @@ class ResultScreen extends StatelessWidget {
       ),
     );
   }
+
+  String _capitalizeFirst(String s) =>
+      s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 }
 
-// =========================================================
-// ====================== STEP TILE ========================
-// =========================================================
-
+// ============================================================
+// STEP TILE — unchanged from your original
+// ============================================================
 class StepTile extends StatelessWidget {
   final String stepNumber;
   final IconData icon;
@@ -301,23 +316,18 @@ class StepTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-
       children: [
-        // ================= STEP NUMBER =================
-
+        // Step number circle
         Container(
           height: 38,
           width: 38,
-
           decoration: const BoxDecoration(
             color: ColorConstants.primary,
             shape: BoxShape.circle,
           ),
-
           child: Center(
             child: Text(
               stepNumber,
-
               style: AppTextStyles.body.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -328,43 +338,27 @@ class StepTile extends StatelessWidget {
 
         const SizedBox(width: 16),
 
-        // ================= CONTENT =================
-
         Expanded(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-
             children: [
-              Icon(
-                icon,
-                color: ColorConstants.primary,
-                size: 28,
-              ),
-
+              Icon(icon, color: ColorConstants.primary, size: 28),
               const SizedBox(width: 14),
-
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-
                   children: [
                     Text(
                       title,
-
                       style: AppTextStyles.subHeading.copyWith(
                         fontSize: 16,
                         color: ColorConstants.heading,
                       ),
                     ),
-
                     const SizedBox(height: 6),
-
                     Text(
                       description,
-
-                      style: AppTextStyles.body.copyWith(
-                        fontSize: 14,
-                      ),
+                      style: AppTextStyles.body.copyWith(fontSize: 14),
                     ),
                   ],
                 ),

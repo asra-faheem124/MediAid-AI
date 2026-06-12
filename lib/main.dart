@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         scaffoldBackgroundColor: ColorConstants.background,
       ),
-      home: OnboardingScreenOne(),
+      home: SplashScreen(),
     );
   }
 }

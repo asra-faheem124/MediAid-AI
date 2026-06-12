@@ -53,10 +53,13 @@ dependencies:
   hive_flutter: ^1.1.0
 
   # Check internet connection
-  connectivity_plus: ^6.0.3
+  connectivity_plus: ^7.1.1
 
   # Save simple key-value data (auth state)
   shared_preferences: ^2.2.3
+  tflite_flutter: ^0.12.1
+  image: ^4.9.1
+  camera: ^0.12.0+1
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +92,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/models/mediaid_model.tflite
+    - assets/models/labels.txt
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

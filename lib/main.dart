@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/controller/AuthController.dart';
 import 'package:mediaid_ui/firebase_options.dart';
+import 'package:mediaid_ui/pages/firstScreens/onboarding_one.dart';
 import 'package:mediaid_ui/pages/firstScreens/splash.dart';
 import 'package:mediaid_ui/services/AuthService.dart';
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
         scaffoldBackgroundColor: ColorConstants.background,
       ),
-      home: SplashScreen(),
+      home: OnboardingScreenOne(),
     );
   }
 }

@@ -1,3 +1,4 @@
+// onboarding_one.dart
 import 'package:flutter/material.dart';
 import 'package:mediaid_ui/components/onboarding.dart';
 
@@ -6,12 +7,6 @@ class OnboardingScreenOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OnboardingComponent(
-      text: "Scan injuries",
-      coloredText: "Instantly",
-      description:
-          "Use AI to detect injuries quickly\nand accurately.",
-      imagePath: "assets/images/onboarding1.png", currentIndex: 0,
-    );
+    return const OnboardingComponent(currentIndex: 0);
   }
 }

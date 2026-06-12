@@ -118,80 +118,79 @@ class Authservice extends GetxController {
   }
 
   // ─── Google Sign In ──────────────────────────────────────
-Future<UserCredential?> signInWithGoogle() async {
-  // Block if offline
-  if (!await _isOnline()) {
-    AppSnackbar.error(
-      Get.context!,
-      'No internet connection. Please connect and try again.',
-    );
-    return null;
-  }
-
-  try {
-    EasyLoading.show(status: 'Please Wait');
-
-    final GoogleSignInAccount? googleUser = await GoogleSignIn(
-  clientId: '686808185076-k6on85pc8u73urm0ne2cqaun4gmd9k4c.apps.googleusercontent.com', // for web
-).signIn();
-
-    if (googleUser == null) {
-      EasyLoading.dismiss();
-      return null; // User cancelled
+  Future<UserCredential?> signInWithGoogle() async {
+    // Block if offline
+    if (!await _isOnline()) {
+      AppSnackbar.error(
+        Get.context!,
+        'No internet connection. Please connect and try again.',
+      );
+      return null;
     }
 
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    try {
+      EasyLoading.show(status: 'Please Wait');
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+      final GoogleSignInAccount? googleUser = await GoogleSignIn(
+        clientId:
+            '686808185076-k6on85pc8u73urm0ne2cqaun4gmd9k4c.apps.googleusercontent.com', // for web
+      ).signIn();
 
-    UserCredential userCredential =
-        await _auth.signInWithCredential(credential);
+      if (googleUser == null) {
+        EasyLoading.dismiss();
+        return null; // User cancelled
+      }
 
-    // Save user to Firestore if first time signing in
-    final userDoc = await _firebaseFireStore
-        .collection('User')
-        .doc(userCredential.user!.uid)
-        .get();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-    if (!userDoc.exists) {
-      Usermodel usermodel = Usermodel(
-        id: userCredential.user!.uid,
-        name: userCredential.user!.displayName ?? 'User',
-        email: userCredential.user!.email ?? '',
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
       );
 
-      await _firebaseFireStore
+      UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
+
+      // Save user to Firestore if first time signing in
+      final userDoc = await _firebaseFireStore
           .collection('User')
           .doc(userCredential.user!.uid)
-          .set(usermodel.toMap());
+          .get();
+
+      if (!userDoc.exists) {
+        Usermodel usermodel = Usermodel(
+          id: userCredential.user!.uid,
+          name: userCredential.user!.displayName ?? 'User',
+          email: userCredential.user!.email ?? '',
+        );
+
+        await _firebaseFireStore
+            .collection('User')
+            .doc(userCredential.user!.uid)
+            .set(usermodel.toMap());
+      }
+
+      // ✅ Save session locally for offline use later
+      await _saveSession(isLoggedIn: true, isGuest: false);
+
+      EasyLoading.dismiss();
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      EasyLoading.dismiss();
+      AppSnackbar.error(Get.context!, e.message ?? 'Some error occurred');
+    } catch (e, s) {
+      EasyLoading.dismiss();
+      print("========================");
+      print(e);
+      print(s);
+      print("========================");
+
+      AppSnackbar.error(Get.context!, "Google Sign-In Failed\n$e");
     }
-
-    // ✅ Save session locally for offline use later
-    await _saveSession(isLoggedIn: true, isGuest: false);
-
-    EasyLoading.dismiss();
-    return userCredential;
-  } on FirebaseAuthException catch (e) {
-    EasyLoading.dismiss();
-    AppSnackbar.error(Get.context!, e.message ?? 'Some error occurred');
-  } catch (e, s) {
-  EasyLoading.dismiss();
-  print("========================");
-  print(e);
-  print(s);
-  print("========================");
-
-  AppSnackbar.error(
-    Get.context!,
-    "Google Sign-In Failed\n$e",
-  );
-}
-  return null;
-}
+    return null;
+  }
 
   // ─── Guest Mode ──────────────────────────────────────────
   // ✅ NEW — No internet needed at all
@@ -209,4 +208,16 @@ Future<UserCredential?> signInWithGoogle() async {
 
   // ─── Get current user (safe getter) ─────────────────────
   User? get currentUser => _auth.currentUser;
+
+  // ── Save onboarding completed ────────────────────────
+  Future<void> completeOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingSeen', true);
+  }
+
+  // ── Check if onboarding was seen ─────────────────────
+  Future<bool> hasSeenOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('onboardingSeen') ?? false;
+  }
 }

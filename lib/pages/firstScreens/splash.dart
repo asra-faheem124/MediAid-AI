@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:mediaid_ui/pages/firstScreens/onboarding_one.dart';
 import 'package:mediaid_ui/pages/firstScreens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mediaid_ui/components/bottom_navigation_bar.dart';
@@ -17,48 +18,59 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   // Animated loading bar width (0.0 → 1.0)
   double _loadingProgress = 0.0;
 
   @override
-void initState() {
-  super.initState();
-  _startLoadingAnimation();
-}
+  void initState() {
+    super.initState();
+    _startLoadingAnimation();
+  }
 
-// Animate loading bar AND navigate when complete
-void _startLoadingAnimation() {
-  Timer.periodic(const Duration(milliseconds: 30), (timer) {
-    if (!mounted) {
-      timer.cancel();
+  // Animate loading bar AND navigate when complete
+  void _startLoadingAnimation() {
+    Timer.periodic(const Duration(milliseconds: 30), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      setState(() {
+        _loadingProgress += 0.02; // faster & smoother
+
+        if (_loadingProgress >= 1.0) {
+          _loadingProgress = 1.0;
+          timer.cancel();
+
+          // Navigate ONLY when loading finishes
+          _decideNavigation();
+        }
+      });
+    });
+  }
+
+  Future<void> _decideNavigation() async {
+    await Future.delayed(const Duration(seconds: 3));
+
+    final prefs = await SharedPreferences.getInstance();
+
+    // ✅ Check onboarding first — highest priority
+    final bool onboardingSeen = prefs.getBool('onboardingSeen') ?? false;
+
+    if (!onboardingSeen) {
+      // Fresh install → show onboarding
+      Get.offAll(() => const OnboardingScreenOne());
       return;
     }
 
-    setState(() {
-      _loadingProgress += 0.02; // faster & smoother
-
-      if (_loadingProgress >= 1.0) {
-        _loadingProgress = 1.0;
-        timer.cancel();
-
-        // Navigate ONLY when loading finishes
-        _decideNavigation();
-      }
-    });
-  });
-}
-
-  Future<void> _decideNavigation() async {
     User? user = FirebaseAuth.instance.currentUser;
 
-    if (user != null) {
+    if (user != null) { 
       Get.offAll(() => BottomNavBar());
       return;
     }
 
     // No Firebase session → check if offline but was logged in before
-    final prefs = await SharedPreferences.getInstance();
     final bool wasLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     final bool wasGuest = prefs.getBool('isGuest') ?? false;
 
@@ -140,16 +152,16 @@ void _startLoadingAnimation() {
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
-                          color: ColorConstants.primaryLight.withValues(alpha: 0.3),
+                          color: ColorConstants.primaryLight.withValues(
+                            alpha: 0.3,
+                          ),
                           blurRadius: 25,
                         ),
                       ],
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(30),
-                      child: Image.asset(
-                        "assets/images/Mediaid AI Logo.png",
-                      ),
+                      child: Image.asset("assets/images/Mediaid AI Logo.png"),
                     ),
                   ),
 

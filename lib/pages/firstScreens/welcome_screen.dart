@@ -113,7 +113,6 @@ class WelcomeScreen extends StatelessWidget {
                               alpha: 0.4,
                             ),
                             blurRadius: 20,
-                            offset: const Offset(0, 8),
                           ),
                         ],
                       ),
@@ -121,7 +120,6 @@ class WelcomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(26),
                         child: Image.asset(
                           "assets/images/Mediaid AI Logo.png",
-                          fit: BoxFit.cover,
                         ),
                       ),
                     ),

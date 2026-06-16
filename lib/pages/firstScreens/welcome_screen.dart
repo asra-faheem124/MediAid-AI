@@ -14,11 +14,12 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final Authservice authService = Get.find<Authservice>();
 
     return Scaffold(
-      backgroundColor: ColorConstants.background,
-
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -31,11 +32,13 @@ class WelcomeScreen extends StatelessWidget {
                 height: 220,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: ColorConstants.primary.withValues(alpha: 0.08),
+                  color: isDark
+                      ? ColorConstants.primary.withValues(alpha: 0.05)
+                      : ColorConstants.primary.withValues(alpha: 0.08),
                 ),
               ),
             ),
-        
+
             Positioned(
               top: 40,
               right: 20,
@@ -44,55 +47,14 @@ class WelcomeScreen extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: ColorConstants.primaryLight.withValues(alpha: 0.12),
+                  color: isDark
+                      ? ColorConstants.primary.withValues(alpha: 0.04)
+                      : ColorConstants.primaryLight.withValues(alpha: 0.12),
                 ),
               ),
             ),
-        
-            // ── Bottom decorative shapes 
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 170,
-                decoration: BoxDecoration(
-                  color: ColorConstants.primary.withValues(alpha: 0.07),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(120),
-                    topRight: Radius.circular(120),
-                  ),
-                ),
-              ),
-            ),
-        
-            Positioned(
-              bottom: -20,
-              left: -40,
-              child: Container(
-                width: 240,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: ColorConstants.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(100),
-                ),
-              ),
-            ),
-        
-            Positioned(
-              bottom: -25,
-              right: -30,
-              child: Container(
-                width: 230,
-                height: 120,
-                decoration: BoxDecoration(
-                  color: ColorConstants.primaryLight.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(100),
-                ),
-              ),
-            ),
-        
-            // Main Content 
+
+            // Main Content
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -100,7 +62,7 @@ class WelcomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 48),
-        
+
                     // Logo
                     Container(
                       width: 100,
@@ -110,7 +72,7 @@ class WelcomeScreen extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: ColorConstants.primaryLight.withValues(
-                              alpha: 0.4,
+                              alpha: 0.3,
                             ),
                             blurRadius: 20,
                           ),
@@ -118,27 +80,25 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(26),
-                        child: Image.asset(
-                          "assets/images/Mediaid AI Logo.png",
-                        ),
+                        child: Image.asset("assets/images/Mediaid AI Logo.png"),
                       ),
                     ),
-        
+
                     const SizedBox(height: 24),
-        
-                    // App Name 
-                    const Text("MediAid AI", style: AppTextStyles.heading),
-        
+
+                    // App Name
+                    Text("MediAid AI", style: AppTextStyles.heading(context)),
+
                     const SizedBox(height: 8),
-        
-                    const Text(
+
+                    Text(
                       "Smart First Aid Assistant",
-                      style: AppTextStyles.subHeading,
+                      style: AppTextStyles.subHeading(context),
                     ),
-        
+
                     const SizedBox(height: 30),
-        
-                    // Feature Pills 
+
+                    // Feature Pills
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -158,29 +118,29 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-        
+
                     const SizedBox(height: 30),
-        
+
                     // Illustration / Tagline Card
-                   TaglineCard(),
-        
-const SizedBox(height: 40),
-        
+                    TaglineCard(),
+
+                    const SizedBox(height: 40),
+
                     // Buttons
                     PrimaryButton(
                       text: "Get Started",
                       onPressed: () => Get.to(() => SignupScreen()),
                     ),
-        
+
                     const SizedBox(height: 12),
-        
+
                     SecondaryButtons(
                       text: "I already have an account",
                       onPressed: () => Get.to(() => LoginScreen()),
                     ),
-        
+
                     const SizedBox(height: 12),
-        
+
                     // Guest Mode
                     GestureDetector(
                       onTap: () async {
@@ -192,9 +152,9 @@ const SizedBox(height: 40),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
+                            Text(
                               "Continue without account  ",
-                              style: AppTextStyles.lightBody,
+                              style: AppTextStyles.lightBody(context),
                             ),
                             Text(
                               "Guest Mode",
@@ -208,16 +168,16 @@ const SizedBox(height: 40),
                         ),
                       ),
                     ),
-        
+
                     const SizedBox(height: 16),
-        
+
                     // Disclaimer
-                    const Text(
+                    Text(
                       "⚠️ This app provides basic first aid guidance only.\nNot a replacement for professional medical care.",
-                      style: AppTextStyles.caption,
+                      style: AppTextStyles.caption(context),
                       textAlign: TextAlign.center,
                     ),
-        
+
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -229,4 +189,3 @@ const SizedBox(height: 40),
     );
   }
 }
-

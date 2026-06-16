@@ -18,7 +18,7 @@ class ForgetPassword extends StatelessWidget {
     final Authcontroller authController = Get.put(Authcontroller());
 
     return Scaffold(
-      backgroundColor: ColorConstants.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: SizedBox(
@@ -48,7 +48,7 @@ class ForgetPassword extends StatelessWidget {
 
                         Text(
                           "Forgot Password",
-                          style: AppTextStyles.heading,
+                          style: AppTextStyles.heading(context),
                           textAlign: TextAlign.center,
                         ),
 
@@ -56,7 +56,7 @@ class ForgetPassword extends StatelessWidget {
 
                         Text(
                           "Enter your email address and we'll send you a link to reset your password.",
-                          style: AppTextStyles.subHeading,
+                          style: AppTextStyles.subHeading(context),
                           textAlign: TextAlign.center,
                         ),
 
@@ -90,13 +90,9 @@ class ForgetPassword extends StatelessWidget {
                         ),
 
                         const SizedBox(height: 16),
-
-                        TextButton(
-                          onPressed: () {
+SecondaryButtons(text: 'Back to Login',   onPressed: () {
                             Get.back();
-                          },
-                          child: const Text("Back to Login"),
-                        ),
+                          },)
                       ],
                     ),
                   ),

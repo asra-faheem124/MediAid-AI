@@ -11,7 +11,6 @@ import 'package:mediaid_ui/components/cards.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/controller/AuthController.dart';
-import 'package:mediaid_ui/pages/firstScreens/welcome_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -36,24 +35,26 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 // ================= TOP SECTION =================
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+
                     // Greeting Section
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           isGuest ? "Welcome to" : "Hello",
-                          style: AppTextStyles.body,
+                          style: AppTextStyles.body(context),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           isGuest
                               ? "MediAid AI"
                               : (user?.displayName ?? "User"),
-                          style: AppTextStyles.title,
+                          style: AppTextStyles.title(context),
                         ),
                       ],
                     ),
@@ -72,19 +73,23 @@ class HomeScreen extends StatelessWidget {
                           )
                         : PopupMenuButton<String>(
                             offset: const Offset(0, 55),
-                            color: ColorConstants.background,
+                            color:Theme.of(context).scaffoldBackgroundColor
+,
                             elevation: 10,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                               side: BorderSide(
-                                color: ColorConstants.border,
+                                color: Theme.of(context).dividerColor,
                                 width: 1,
                               ),
                             ),
                             icon: CircleAvatar(
                               radius: 22,
                               backgroundColor: ColorConstants.primary,
-                              child: Text(initial, style: AppTextStyles.button),
+                              child: Text(
+                                initial,
+                                style: AppTextStyles.button,
+                              ),
                             ),
                             onSelected: (value) async {
                               switch (value) {
@@ -101,17 +106,20 @@ class HomeScreen extends StatelessWidget {
                             },
                             itemBuilder: (context) => [
                               _buildMenuItem(
+                                context: context,
                                 value: "profile",
                                 icon: Icons.person_outline,
                                 title: "Profile",
                               ),
                               _buildMenuItem(
+                                context: context,
                                 value: "history",
                                 icon: Icons.history,
                                 title: "Scan History",
                               ),
                               const PopupMenuDivider(height: 8),
                               _buildMenuItem(
+                                context: context,
                                 value: "logout",
                                 icon: Icons.logout,
                                 title: "Logout",
@@ -124,7 +132,10 @@ class HomeScreen extends StatelessWidget {
 
                 const SizedBox(height: 24),
 
-                Text("How can we help you today?", style: AppTextStyles.body),
+                Text(
+                  "How can we help you today?",
+                  style: AppTextStyles.body(context),
+                ),
 
                 const SizedBox(height: 24),
 
@@ -184,6 +195,7 @@ class HomeScreen extends StatelessWidget {
 // ================= POPUP MENU ITEM BUILDER =================
 
 PopupMenuItem<String> _buildMenuItem({
+  required BuildContext context,
   required String value,
   required IconData icon,
   required String title,
@@ -203,10 +215,10 @@ PopupMenuItem<String> _buildMenuItem({
         const SizedBox(width: 12),
         Text(
           title,
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body(context).copyWith(
             color: isDestructive
                 ? ColorConstants.danger
-                : ColorConstants.heading,
+                : Theme.of(context).primaryColor,
             fontWeight: FontWeight.w500,
           ),
         ),

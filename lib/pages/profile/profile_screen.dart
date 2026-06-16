@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/profile_components.dart';
 import 'package:mediaid_ui/components/top_bar.dart';
+import 'package:mediaid_ui/controller/AuthController.dart';
 import 'package:mediaid_ui/pages/profile/medical_info_screen.dart';
 import 'package:mediaid_ui/pages/profile/edit_profile_screen.dart';
 import 'package:mediaid_ui/pages/profile/settings_screen.dart';
@@ -27,6 +28,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Authcontroller authController = Get.find<Authcontroller>();
+
     if (currentUser == null) {
       return const Scaffold(body: Center(child: Text("No user logged in")));
     }
@@ -104,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: "Logout",
                     iconColor: ColorConstants.danger,
                     onTap: () async {
-                      await FirebaseAuth.instance.signOut();
+                      await authController.logout();
                     },
                   ),
                 ],

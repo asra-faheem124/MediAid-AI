@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mediaid_ui/components/buttons.dart';
-import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/form_components.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/controller/AuthController.dart';
@@ -16,7 +15,7 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -43,7 +42,7 @@ class SignupScreen extends StatelessWidget {
 
                 // ================= TITLE =================
                 Center(
-                  child: Text("Create Account", style: AppTextStyles.heading),
+                  child: Text("Create Account", style: AppTextStyles.heading(context)),
                 ),
 
                 const SizedBox(height: 10),
@@ -51,7 +50,7 @@ class SignupScreen extends StatelessWidget {
                 Center(
                   child: Text(
                     "Create your MediAid AI account",
-                    style: AppTextStyles.lightBody,
+                    style: AppTextStyles.lightBody(context),
                   ),
                 ),
 
@@ -60,7 +59,7 @@ class SignupScreen extends StatelessWidget {
                 // ================= FULL NAME =================
                 Text(
                   "Full Name",
-                  style: AppTextStyles.subHeading.copyWith(fontSize: 16),
+                  style: AppTextStyles.subHeading(context).copyWith(fontSize: 16),
                 ),
 
                 const SizedBox(height: 10),
@@ -83,7 +82,7 @@ class SignupScreen extends StatelessWidget {
                 // ================= EMAIL =================
                 Text(
                   "Email",
-                  style: AppTextStyles.subHeading.copyWith(fontSize: 16),
+                  style: AppTextStyles.subHeading(context).copyWith(fontSize: 16),
                 ),
 
                 const SizedBox(height: 10),
@@ -108,7 +107,7 @@ class SignupScreen extends StatelessWidget {
                 // ================= PASSWORD =================
                 Text(
                   "Password",
-                  style: AppTextStyles.subHeading.copyWith(fontSize: 16),
+                  style: AppTextStyles.subHeading(context).copyWith(fontSize: 16),
                 ),
 
                 const SizedBox(height: 10),
@@ -176,7 +175,7 @@ class SignupScreen extends StatelessWidget {
                   children: [
                     Text(
                       "Already have an account? ",
-                      style: AppTextStyles.body,
+                      style: AppTextStyles.body(context),
                     ),
 
                     GestureDetector(

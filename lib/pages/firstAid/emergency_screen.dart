@@ -60,7 +60,7 @@ class EmergencyScreen extends StatelessWidget {
 
                         Text(
                           "SOS",
-                          style: AppTextStyles.body.copyWith(
+                          style: AppTextStyles.body(context).copyWith(
                             color: ColorConstants.background,
                             fontWeight: FontWeight.bold,
                           ),
@@ -77,7 +77,7 @@ class EmergencyScreen extends StatelessWidget {
 
               Text(
                 "Need immediate assistance?",
-                style: AppTextStyles.subHeading.copyWith(
+                style: AppTextStyles.subHeading(context).copyWith(
                   color: ColorConstants.heading,
                 ),
                 textAlign: TextAlign.center,
@@ -89,7 +89,7 @@ class EmergencyScreen extends StatelessWidget {
 
               Text(
                 "Contact emergency services or your nearest hospital.",
-                style: AppTextStyles.body,
+                style: AppTextStyles.body(context),
                 textAlign: TextAlign.center,
               ),
 
@@ -157,7 +157,7 @@ class EmergencyScreen extends StatelessWidget {
 
               Text(
                 "Use only in real emergencies.",
-                style: AppTextStyles.caption.copyWith(
+                style: AppTextStyles.caption(context).copyWith(
                   color: ColorConstants.danger,
                   fontWeight: FontWeight.w500,
                 ),
@@ -223,7 +223,7 @@ class EmergencyActionCard extends StatelessWidget {
 
               Text(
                 title,
-                style: AppTextStyles.body.copyWith(
+                style: AppTextStyles.body(context).copyWith(
                   fontWeight: FontWeight.w600,
                 ),
                 textAlign: TextAlign.center,

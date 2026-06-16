@@ -152,7 +152,7 @@ class ResultScreen extends StatelessWidget {
                           Expanded(
                             child: Text(
                               result.decision,
-                              style: AppTextStyles.body.copyWith(
+                              style: AppTextStyles.body(context).copyWith(
                                 color: severityColor,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -171,9 +171,7 @@ class ResultScreen extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         "First Aid Instructions",
-                        style: AppTextStyles.subHeading.copyWith(
-                          color: ColorConstants.heading,
-                        ),
+                        style: AppTextStyles.subHeading(context),
                       ),
                     ),
 
@@ -226,7 +224,7 @@ class ResultScreen extends StatelessWidget {
                           result.isOffline
                               ? 'Analyzed offline'
                               : 'Analyzed via server',
-                          style: AppTextStyles.caption,
+                          style: AppTextStyles.caption(context),
                         ),
                       ],
                     ),
@@ -258,15 +256,12 @@ class ResultScreen extends StatelessWidget {
                     // ─────────────────────────────────────────────
                     // SCAN AGAIN
                     // ─────────────────────────────────────────────
-                    TextButton(
+                    SecondaryButtons(
+                      text: "Scan Another Injury",
                       onPressed: () {
                         scanController.reset();
                         Get.until((route) => route.isFirst);
                       },
-                      child: Text(
-                        "Scan Another Injury",
-                        style: AppTextStyles.primaryText,
-                      ),
                     ),
 
                     const SizedBox(height: 8),
@@ -277,7 +272,7 @@ class ResultScreen extends StatelessWidget {
                     Text(
                       "This is not a substitute for professional medical advice.",
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.caption,
+                      style: AppTextStyles.caption(context),
                     ),
 
                     const SizedBox(height: 12),
@@ -328,10 +323,9 @@ class StepTile extends StatelessWidget {
           child: Center(
             child: Text(
               stepNumber,
-              style: AppTextStyles.body.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTextStyles.body(
+                context,
+              ).copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -348,17 +342,11 @@ class StepTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: AppTextStyles.subHeading.copyWith(
-                        fontSize: 16,
-                        color: ColorConstants.heading,
-                      ),
-                    ),
+                    Text(title, style: AppTextStyles.subHeading(context)),
                     const SizedBox(height: 6),
                     Text(
                       description,
-                      style: AppTextStyles.body.copyWith(fontSize: 14),
+                      style: AppTextStyles.body(context).copyWith(fontSize: 14),
                     ),
                   ],
                 ),

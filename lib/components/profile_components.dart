@@ -42,7 +42,7 @@ class ProfileHeaderCard extends StatelessWidget {
 
           Text(
             name,
-            style: AppTextStyles.subHeading.copyWith(
+            style: AppTextStyles.subHeading(context).copyWith(
               color: Colors.white,
               fontSize: 22,
             ),
@@ -52,7 +52,7 @@ class ProfileHeaderCard extends StatelessWidget {
 
           Text(
           email,
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body(context).copyWith(
               color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
@@ -93,10 +93,12 @@ class ProfileMenuTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
 
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(20),
 
-            border: Border.all(color: ColorConstants.border),
+            border: Border.all(
+  color: Theme.of(context).dividerColor,
+),
           ),
 
           child: Row(
@@ -108,7 +110,7 @@ class ProfileMenuTile extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: AppTextStyles.body.copyWith(
+                  style: AppTextStyles.body(context).copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),

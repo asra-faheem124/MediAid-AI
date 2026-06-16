@@ -1,36 +1,41 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 
 class AppSnackbar {
   // ================= SUCCESS =================
+
   static void success(BuildContext context, String message) {
     _showGlassSnackBar(
       context: context,
       message: message,
-      icon: Icons.check_circle_outline,
+      icon: Icons.check_circle_outline_rounded,
       iconColor: const Color(0xFF22C55E),
     );
   }
 
   // ================= ERROR =================
+
   static void error(BuildContext context, String message) {
     _showGlassSnackBar(
       context: context,
       message: message,
-      icon: Icons.error_outline,
+      icon: Icons.error_outline_rounded,
       iconColor: const Color(0xFFEF4444),
     );
   }
 
-  // ================= CORE WHITE GLASS SNACKBAR =================
+  // ================= CORE GLASS SNACKBAR =================
+
   static void _showGlassSnackBar({
     required BuildContext context,
     required String message,
     required IconData icon,
     required Color iconColor,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.transparent,
@@ -38,50 +43,68 @@ class AppSnackbar {
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
         duration: const Duration(seconds: 3),
+
         content: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
+
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+            filter: ImageFilter.blur(
+              sigmaX: 16,
+              sigmaY: 16,
+            ),
+
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 14,
               ),
+
               decoration: BoxDecoration(
-                color: ColorConstants.border,
-                borderRadius: BorderRadius.circular(16),
+                color: isDark
+                    ? theme.cardColor.withValues(alpha: 0.90)
+                    : Colors.white.withValues(alpha: 0.90),
+
+                borderRadius: BorderRadius.circular(18),
+
                 border: Border.all(
-                  color: const Color(0xFFE5E7EB),
+                  color: theme.dividerColor,
                   width: 1,
                 ),
+
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
+                    color: Colors.black.withValues(
+                      alpha: isDark ? 0.25 : 0.08,
+                    ),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
                   ),
                 ],
               ),
+
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(8),
+
                     decoration: BoxDecoration(
-                      color: iconColor.withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(8),
+                      color: iconColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
+
                     child: Icon(
                       icon,
                       size: 20,
                       color: iconColor,
                     ),
                   ),
+
                   const SizedBox(width: 12),
+
                   Expanded(
                     child: Text(
                       message,
-                      style: AppTextStyles.body.copyWith(
-                        color: const Color(0xFF111827),
+                      style: AppTextStyles.body(context).copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),

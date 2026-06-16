@@ -58,17 +58,20 @@ class OnboardingComponent extends StatelessWidget {
               // ── Dots indicator ───────────────────────
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(2, (index) => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: currentIndex == index ? 22 : 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: currentIndex == index
-                        ? ColorConstants.primary
-                        : ColorConstants.border,
-                    borderRadius: BorderRadius.circular(20),
+                children: List.generate(
+                  2,
+                  (index) => Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    width: currentIndex == index ? 22 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: currentIndex == index
+                          ? ColorConstants.primary
+                          : ColorConstants.border,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
-                )),
+                ),
               ),
 
               const SizedBox(height: 24),
@@ -97,18 +100,14 @@ class OnboardingComponent extends StatelessWidget {
     );
   }
 
-  // ═══════════════════════════════════════════════════
-  // SCREEN 1 — Scan + Results + Severity
-  // ═══════════════════════════════════════════════════
+  // ═════════ SCREEN 1 ═════════
   Widget _buildScreenOne() {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           const SizedBox(height: 8),
 
-          // ── Title ──────────────────────────────────
           Center(
             child: RichText(
               textAlign: TextAlign.center,
@@ -131,40 +130,36 @@ class OnboardingComponent extends StatelessWidget {
 
           const SizedBox(height: 28),
 
-          // ── Step 1: Scan ───────────────────────────
           _GuideItem(
             icon: Icons.camera_alt_rounded,
             iconColor: ColorConstants.primary,
             title: "Scan the Injury",
             description:
-                "Tap 'Scan Injury' on the home screen. Take a clear photo of the injury or pick one from your gallery.",
+                "Tap 'Scan Injury' on the home screen. Take a clear photo or pick from gallery.",
           ),
 
           const SizedBox(height: 16),
 
-          // ── Step 2: Results ────────────────────────
           _GuideItem(
             icon: Icons.analytics_outlined,
             iconColor: ColorConstants.primaryDark,
             title: "Read the Results",
             description:
-                "AI detects the injury type and shows confidence level, step-by-step first aid, Do's and Don'ts.",
+                "AI detects injury type and shows steps, Do's and Don'ts.",
           ),
 
           const SizedBox(height: 16),
 
-          // ── Step 3: Severity ───────────────────────
           _GuideItem(
             icon: Icons.warning_amber_rounded,
             iconColor: ColorConstants.warning,
             title: "Understand Severity",
             description:
-                "Every scan shows a severity level so you know exactly what to do.",
+                "Every scan shows severity so you know what to do.",
           ),
 
           const SizedBox(height: 16),
 
-          // ── Severity legend ────────────────────────
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -176,19 +171,19 @@ class OnboardingComponent extends StatelessWidget {
                 _SeverityRow(
                   color: ColorConstants.success,
                   label: "Low",
-                  description: "Treat at home with basic first aid",
+                  description: "Treat at home",
                 ),
                 SizedBox(height: 10),
                 _SeverityRow(
                   color: ColorConstants.warning,
                   label: "Medium",
-                  description: "Monitor closely, visit clinic if needed",
+                  description: "Monitor closely",
                 ),
                 SizedBox(height: 10),
                 _SeverityRow(
                   color: ColorConstants.danger,
                   label: "High",
-                  description: "Seek medical help immediately",
+                  description: "Seek medical help",
                 ),
               ],
             ),
@@ -198,18 +193,14 @@ class OnboardingComponent extends StatelessWidget {
     );
   }
 
-  // ═══════════════════════════════════════════════════
-  // SCREEN 2 — Offline + Emergency
-  // ═══════════════════════════════════════════════════
+  // ═════════ SCREEN 2 ═════════
   Widget _buildScreenTwo() {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           const SizedBox(height: 8),
 
-          // ── Title ──────────────────────────────────
           Center(
             child: RichText(
               textAlign: TextAlign.center,
@@ -232,18 +223,16 @@ class OnboardingComponent extends StatelessWidget {
 
           const SizedBox(height: 28),
 
-          // ── Offline mode ───────────────────────────
           _GuideItem(
             icon: Icons.wifi_off_rounded,
             iconColor: ColorConstants.primary,
             title: "Works Offline",
             description:
-                "No internet? No problem. MediAid AI works fully offline once installed — perfect for rural areas and emergencies.",
+                "Works without internet after first login.",
           ),
 
           const SizedBox(height: 16),
 
-          // ── Offline tip card ───────────────────────
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -253,18 +242,15 @@ class OnboardingComponent extends StatelessWidget {
                 color: ColorConstants.primary.withValues(alpha: 0.2),
               ),
             ),
-            child: Row(
+            child: const Row(
               children: [
-                const Icon(
-                  Icons.info_outline_rounded,
-                  color: ColorConstants.primary,
-                  size: 20,
-                ),
-                const SizedBox(width: 10),
+                Icon(Icons.info_outline_rounded,
+                    color: ColorConstants.primary, size: 20),
+                SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    "Login once while online — app remembers you and works offline automatically.",
-                    style: AppTextStyles.lightBody.copyWith(fontSize: 13),
+                    "Login once online — works offline later.",
+                    style: TextStyle(fontSize: 13),
                   ),
                 ),
               ],
@@ -273,29 +259,26 @@ class OnboardingComponent extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // ── Emergency feature ──────────────────────
           _GuideItem(
             icon: Icons.emergency_rounded,
             iconColor: ColorConstants.danger,
             title: "Emergency Help",
             description:
-                "Tap 'Emergency Help' on any result screen to instantly call for help or find the nearest hospital.",
+                "Call or find hospital instantly.",
           ),
 
           const SizedBox(height: 16),
 
-          // ── Voice guide ────────────────────────────
           _GuideItem(
             icon: Icons.volume_up_rounded,
             iconColor: ColorConstants.primaryDark,
             title: "Voice Guide",
             description:
-                "Can't read in an emergency? Tap 'Voice Guide' to hear step-by-step first aid instructions read aloud.",
+                "Hear instructions in emergencies.",
           ),
 
           const SizedBox(height: 16),
 
-          // ── Disclaimer ─────────────────────────────
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -305,19 +288,15 @@ class OnboardingComponent extends StatelessWidget {
                 color: ColorConstants.warning.withValues(alpha: 0.3),
               ),
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: const Row(
               children: [
-                const Icon(
-                  Icons.warning_amber_rounded,
-                  color: ColorConstants.warning,
-                  size: 20,
-                ),
-                const SizedBox(width: 10),
+                Icon(Icons.warning_amber_rounded,
+                    color: ColorConstants.warning, size: 20),
+                SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    "MediAid AI provides basic first aid guidance only. Always seek professional medical help for serious injuries.",
-                    style: AppTextStyles.lightBody.copyWith(fontSize: 13),
+                    "Not a replacement for medical advice.",
+                    style: TextStyle(fontSize: 13),
                   ),
                 ),
               ],
@@ -329,9 +308,7 @@ class OnboardingComponent extends StatelessWidget {
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// GUIDE ITEM WIDGET
-// ═══════════════════════════════════════════════════════
+// ═════════ GUIDE ITEM ═════════
 class _GuideItem extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
@@ -365,13 +342,16 @@ class _GuideItem extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: AppTextStyles.subHeading.copyWith(
+                style: AppTextStyles.subHeading(context).copyWith(
                   fontSize: 16,
                   color: ColorConstants.heading,
                 ),
               ),
               const SizedBox(height: 4),
-              Text(description, style: AppTextStyles.lightBody),
+              Text(
+                description,
+                style: AppTextStyles.lightBody(context).copyWith(fontSize: 13),
+              ),
             ],
           ),
         ),
@@ -380,9 +360,7 @@ class _GuideItem extends StatelessWidget {
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// SEVERITY ROW WIDGET
-// ═══════════════════════════════════════════════════════
+// ═════════ SEVERITY ROW ═════════
 class _SeverityRow extends StatelessWidget {
   final Color color;
   final String label;
@@ -408,7 +386,7 @@ class _SeverityRow extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          "$label  —  ",
+          "$label — ",
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -418,7 +396,7 @@ class _SeverityRow extends StatelessWidget {
         Expanded(
           child: Text(
             description,
-            style: AppTextStyles.caption,
+            style: AppTextStyles.caption(context),
           ),
         ),
       ],

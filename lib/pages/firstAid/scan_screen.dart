@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
+import 'package:mediaid_ui/components/top_bar.dart';
 import 'package:mediaid_ui/controller/ScanController.dart';
 
 class ScanScreen extends StatelessWidget {
@@ -13,7 +14,7 @@ class ScanScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -22,22 +23,7 @@ class ScanScreen extends StatelessWidget {
             children: [
 
               // ================= TOP BAR =================
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      scanController.reset();
-                      Get.back();
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: ColorConstants.heading,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text("Scan Injury", style: AppTextStyles.title),
-                ],
-              ),
+              TopBar(title: "Scan Injury"),
 
               const SizedBox(height: 24),
 
@@ -126,14 +112,14 @@ class ScanScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         Text(
                           "Tap to take a photo",
-                          style: AppTextStyles.subHeading.copyWith(
+                          style: AppTextStyles.subHeading(context).copyWith(
                             color: ColorConstants.primary,
                           ),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           "Point camera at the injury clearly",
-                          style: AppTextStyles.lightBody,
+                          style: AppTextStyles.lightBody(context),
                         ),
                       ],
                     ),
@@ -164,7 +150,7 @@ class ScanScreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         "For best results: good lighting, clear view of injury, steady hand.",
-                        style: AppTextStyles.lightBody.copyWith(fontSize: 13),
+                        style: AppTextStyles.lightBody(context).copyWith(fontSize: 13),
                       ),
                     ),
                   ],
@@ -216,9 +202,9 @@ class ScanScreen extends StatelessWidget {
               const SizedBox(height: 16),
 
               // ================= DISCLAIMER =================
-              const Text(
+               Text(
                 "⚠️ Not a substitute for professional medical advice.",
-                style: AppTextStyles.caption,
+                style: AppTextStyles.caption(context),
                 textAlign: TextAlign.center,
               ),
 

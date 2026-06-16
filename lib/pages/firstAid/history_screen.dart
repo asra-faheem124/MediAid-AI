@@ -26,7 +26,7 @@ class HistoryScreen extends StatelessWidget {
 
                 child: Text(
                   "Recent Histories",
-                  style: AppTextStyles.subHeading,
+                  style: AppTextStyles.subHeading(context),
                 ),
               ),
               const SizedBox(height: 24),
@@ -115,10 +115,10 @@ class HistoryCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color:  Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(22),
 
-        border: Border.all(color: ColorConstants.border),
+        border: Border.all(color: Theme.of(context).dividerColor),
       ),
 
       child: Row(
@@ -148,15 +148,12 @@ class HistoryCard extends StatelessWidget {
               children: [
                 Text(
                   injury,
-                  style: AppTextStyles.subHeading.copyWith(
-                    color: ColorConstants.heading,
-                    fontSize: 17,
-                  ),
+                  style: AppTextStyles.subHeading(context)
                 ),
 
                 const SizedBox(height: 5),
 
-                Text(date, style: AppTextStyles.lightBody),
+                Text(date, style: AppTextStyles.body(context).copyWith(fontSize: 12)),
               ],
             ),
           ),
@@ -173,7 +170,7 @@ class HistoryCard extends StatelessWidget {
             child: Text(
               severity,
 
-              style: AppTextStyles.caption.copyWith(
+              style: AppTextStyles.caption(context).copyWith(
                 color: getSeverityColor(),
                 fontWeight: FontWeight.w600,
               ),

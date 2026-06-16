@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mediaid_ui/components/buttons.dart';
-import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/form_components.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/controller/AuthController.dart';
@@ -17,7 +16,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorConstants.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       body: SafeArea(
         child: SingleChildScrollView(
@@ -44,7 +43,7 @@ class LoginScreen extends StatelessWidget {
 
                 // ================= TITLE =================
                 Center(
-                  child: Text("Welcome Back", style: AppTextStyles.heading),
+                  child: Text("Welcome Back", style: AppTextStyles.heading(context)),
                 ),
 
                 const SizedBox(height: 10),
@@ -52,7 +51,7 @@ class LoginScreen extends StatelessWidget {
                 Center(
                   child: Text(
                     "Login to continue using MediAid AI",
-                    style: AppTextStyles.lightBody,
+                    style: AppTextStyles.lightBody(context),
                   ),
                 ),
 
@@ -61,7 +60,7 @@ class LoginScreen extends StatelessWidget {
                 // ================= EMAIL =================
                 Text(
                   "Email",
-                  style: AppTextStyles.subHeading.copyWith(fontSize: 16),
+                  style: AppTextStyles.subHeading(context).copyWith(fontSize: 16),
                 ),
 
                 const SizedBox(height: 10),
@@ -86,7 +85,7 @@ class LoginScreen extends StatelessWidget {
                 // ================= PASSWORD =================
                 Text(
                   "Password",
-                  style: AppTextStyles.subHeading.copyWith(fontSize: 16),
+                  style: AppTextStyles.subHeading(context).copyWith(fontSize: 16),
                 ),
 
                 const SizedBox(height: 10),
@@ -155,7 +154,7 @@ class LoginScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
 
-                      child: Text("OR", style: AppTextStyles.lightBody),
+                      child: Text("OR", style: AppTextStyles.lightBody(context)),
                     ),
 
                     const Expanded(child: Divider()),
@@ -178,7 +177,7 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
 
                   children: [
-                    Text("Don't have an account? ", style: AppTextStyles.body),
+                    Text("Don't have an account? ", style: AppTextStyles.body(context)),
 
                     GestureDetector(
                       onTap: () {

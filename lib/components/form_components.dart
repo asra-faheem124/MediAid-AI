@@ -39,7 +39,7 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: AppTextStyles.lightBody,
+        hintStyle: AppTextStyles.lightBody(context),
         errorText: errorText,
         prefixIcon: Icon(icon, color: ColorConstants.primary),
         suffixIcon: isPassword
@@ -49,19 +49,19 @@ class CustomTextField extends StatelessWidget {
                   obscureText
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
-                  color: ColorConstants.lightText,
+                  color: Theme.of(context).hintColor,
                 ),
               )
             : null,
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
         contentPadding: const EdgeInsets.symmetric(
           vertical: 18,
           horizontal: 16,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: ColorConstants.border),
+          borderSide:  BorderSide(color: Theme.of(context).dividerColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
@@ -100,19 +100,22 @@ class SearchTextField extends StatelessWidget {
 
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: AppTextStyles.lightBody,
+        hintStyle: AppTextStyles.lightBody(context),
 
-        prefixIcon: const Icon(Icons.search, color: ColorConstants.lightText),
+        prefixIcon: Icon(
+  Icons.search,
+  color: Theme.of(context).hintColor,
+) ,
 
         filled: true,
-        fillColor: Colors.white,
+        fillColor:Theme.of(context).inputDecorationTheme.fillColor,
 
         contentPadding: const EdgeInsets.symmetric(vertical: 18),
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
 
-          borderSide: const BorderSide(color: ColorConstants.border),
+          borderSide:  BorderSide(color: Theme.of(context).dividerColor),
         ),
 
         focusedBorder: OutlineInputBorder(

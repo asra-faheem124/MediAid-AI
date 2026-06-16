@@ -116,7 +116,7 @@ class DangerButton extends StatelessWidget {
 }
 
 
-// ================= SOCIAL LOGIN BUTTON ===================
+// ================= SOCIAL LOGIN BUTTON =================
 class SocialLoginButton extends StatelessWidget {
   final String text;
   final IconData icon;
@@ -134,29 +134,24 @@ class SocialLoginButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: 58,
-
       child: OutlinedButton.icon(
         onPressed: onPressed,
-
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(
-            color: ColorConstants.border,
+          side: BorderSide(
+            color: Theme.of(context).dividerColor, // ✅ was hardcoded
           ),
-
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
         ),
-
         icon: Icon(
           icon,
           color: ColorConstants.primary,
           size: 34,
         ),
-
         label: Text(
           text,
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body(context).copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),

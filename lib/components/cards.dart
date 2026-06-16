@@ -3,10 +3,8 @@ import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 
 // ================= SCAN CARD =================
-
 class ScanCard extends StatelessWidget {
   final VoidCallback onTap;
-
   const ScanCard({super.key, required this.onTap});
 
   @override
@@ -45,12 +43,14 @@ class ScanCard extends StatelessWidget {
                 const SizedBox(height: 14),
                 Text(
                   "Scan Injury",
-                  style: AppTextStyles.subHeading.copyWith(color: Colors.white),
+                  style: AppTextStyles.subHeading(context).copyWith(
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   "Tap to scan now",
-                  style: AppTextStyles.lightBody.copyWith(
+                  style: AppTextStyles.lightBody(context).copyWith(
                     color: Colors.white.withValues(alpha: 0.85),
                   ),
                 ),
@@ -64,7 +64,6 @@ class ScanCard extends StatelessWidget {
 }
 
 // ================= ACTION CARD =================
-
 class ActionCard extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -89,9 +88,9 @@ class ActionCard extends StatelessWidget {
         child: Ink(
           padding: const EdgeInsets.symmetric(vertical: 22),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardTheme.color, // ✅ theme aware
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: ColorConstants.border),
+            border: Border.all(color: Theme.of(context).dividerColor), // ✅
           ),
           child: Column(
             children: [
@@ -99,7 +98,9 @@ class ActionCard extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 title,
-                style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+                style: AppTextStyles.body(context).copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -110,7 +111,6 @@ class ActionCard extends StatelessWidget {
 }
 
 // ================= SAFETY CARD =================
-
 class SafetyCard extends StatelessWidget {
   const SafetyCard({super.key});
 
@@ -119,9 +119,9 @@ class SafetyCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardTheme.color, // ✅
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: ColorConstants.border),
+        border: Border.all(color: Theme.of(context).dividerColor), // ✅
       ),
       child: Row(
         children: [
@@ -131,12 +131,14 @@ class SafetyCard extends StatelessWidget {
               children: [
                 Text(
                   "Stay prepared. Stay safe.",
-                  style: AppTextStyles.subHeading.copyWith(fontSize: 16),
+                  style: AppTextStyles.subHeading(context).copyWith(
+                    fontSize: 16,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   "MediAid AI is here to help you in emergencies.",
-                  style: AppTextStyles.lightBody,
+                  style: AppTextStyles.lightBody(context),
                 ),
               ],
             ),
@@ -160,7 +162,6 @@ class SafetyCard extends StatelessWidget {
 }
 
 // ================= RESULT INFO CARD =================
-
 class ResultInfoCard extends StatelessWidget {
   final String title;
   final String value;
@@ -180,9 +181,9 @@ class ResultInfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardTheme.color, // ✅
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: ColorConstants.border),
+        border: Border.all(color: Theme.of(context).dividerColor), // ✅
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,13 +192,14 @@ class ResultInfoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: AppTextStyles.lightBody),
+                Text(title, style: AppTextStyles.lightBody(context)),
                 const SizedBox(height: 10),
                 Text(
                   value,
-                  style:
-                      valueStyle ??
-                      AppTextStyles.title.copyWith(fontWeight: FontWeight.bold),
+                  style: valueStyle ??
+                      AppTextStyles.title(context).copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ],
             ),
@@ -210,7 +212,6 @@ class ResultInfoCard extends StatelessWidget {
 }
 
 // ================= RECOMMENDATION CARD =================
-
 class RecommendationCard extends StatelessWidget {
   const RecommendationCard({super.key});
 
@@ -220,16 +221,16 @@ class RecommendationCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardTheme.color, // ✅
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: ColorConstants.border),
+        border: Border.all(color: Theme.of(context).dividerColor), // ✅
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "AI Recommendation",
-            style: AppTextStyles.subHeading.copyWith(fontSize: 16),
+            style: AppTextStyles.subHeading(context).copyWith(fontSize: 16),
           ),
           const SizedBox(height: 12),
           Text(
@@ -242,7 +243,7 @@ class RecommendationCard extends StatelessWidget {
   }
 }
 
-// ── Illustration / Tagline Card ──────────
+// ================= TAGLINE CARD =================
 class TaglineCard extends StatelessWidget {
   const TaglineCard({super.key});
 
@@ -260,21 +261,21 @@ class TaglineCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(
+          const Icon(
             Icons.health_and_safety_rounded,
             size: 52,
             color: ColorConstants.primary,
           ),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             "Instant First Aid Guidance",
-            style: AppTextStyles.title,
+            style: AppTextStyles.title(context),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             "Scan any injury and get smart, step-by-step first aid instructions — even without internet.",
-            style: AppTextStyles.lightBody,
+            style: AppTextStyles.lightBody(context),
             textAlign: TextAlign.center,
           ),
         ],
@@ -283,7 +284,7 @@ class TaglineCard extends StatelessWidget {
   }
 }
 
-// ── Feature Pill Widget 
+// ================= FEATURE PILL =================
 class FeaturePill extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -308,7 +309,7 @@ class FeaturePill extends StatelessWidget {
           const SizedBox(width: 5),
           Text(
             label,
-            style: AppTextStyles.caption.copyWith(
+            style: AppTextStyles.caption(context).copyWith(
               color: ColorConstants.primary,
               fontWeight: FontWeight.w600,
             ),
@@ -319,8 +320,7 @@ class FeaturePill extends StatelessWidget {
   }
 }
 
-// ================= CATEGORY CARD =========================
-
+// ================= GUIDE CATEGORY CARD =================
 class GuideCategoryCard extends StatelessWidget {
   final String icon;
   final String title;
@@ -337,31 +337,21 @@ class GuideCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(18),
-
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardTheme.color, // ✅
         borderRadius: BorderRadius.circular(24),
-
-        border: Border.all(
-          color: ColorConstants.border,
-        ),
+        border: Border.all(color: Theme.of(context).dividerColor), // ✅
       ),
-
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-
         children: [
-          // ================= ICON =================
-
           Container(
             height: 80,
             width: 80,
-
             decoration: BoxDecoration(
               color: ColorConstants.primary.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
-
             child: Center(
               child: Text(
                 icon,
@@ -369,31 +359,16 @@ class GuideCategoryCard extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: 8),
-
-          // ================= TITLE =================
-
           Text(
             title,
-
-            style: AppTextStyles.subHeading.copyWith(
-              color: ColorConstants.heading,
-              fontSize: 17,
-            ),
+            style: AppTextStyles.subHeading(context).copyWith(fontSize: 17),
             textAlign: TextAlign.center,
           ),
-
           const SizedBox(height: 6),
-
-          // ================= SUBTITLE =================
-
           Text(
             subtitle,
-
-            style: AppTextStyles.lightBody.copyWith(
-              fontSize: 13,
-            ),
+            style: AppTextStyles.lightBody(context).copyWith(fontSize: 13),
             textAlign: TextAlign.center,
           ),
         ],

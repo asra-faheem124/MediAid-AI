@@ -1,10 +1,42 @@
+// ============================================================
+// emergency_screen.dart
+// SOS screen — tapping "Call Emergency 112" opens the phone
+// dialer with 112 pre-filled (user still taps call themselves —
+// apps cannot auto-dial without special system permissions).
+// ============================================================
+
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/components/top_bar.dart';
 
 class EmergencyScreen extends StatelessWidget {
   const EmergencyScreen({super.key});
+
+  // ── Opens the native phone dialer with the number pre-filled ──
+  Future<void> _callEmergencyNumber(BuildContext context) async {
+    const String emergencyNumber = '112';
+    final Uri dialUri = Uri(scheme: 'tel', path: emergencyNumber);
+
+    try {
+      final bool launched = await launchUrl(dialUri);
+      if (!launched) {
+        _showCallError(context);
+      }
+    } catch (e) {
+      _showCallError(context);
+    }
+  }
+
+  void _showCallError(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Could not open phone dialer. Please dial 112 manually.'),
+        backgroundColor: ColorConstants.danger,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +134,8 @@ class EmergencyScreen extends StatelessWidget {
                 height: 60,
 
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  // 👇 Opens phone dialer with 112 pre-filled
+                  onPressed: () => _callEmergencyNumber(context),
 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: ColorConstants.danger,

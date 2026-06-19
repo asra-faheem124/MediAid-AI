@@ -1,6 +1,8 @@
 // ============================================================
 // injury_classifier.dart
 // On-device TFLite inference + first aid guidance lookup
+// Updated for 6-class model:
+//   Abrasions, Bruises, Burns, Cut, Laseration, Normal
 // ============================================================
 
 import 'dart:io';
@@ -10,16 +12,16 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
 
 class Injuryservice {
-  // ── Model constants (confirmed from model inspection) ──────────
+  // ── Model constants ─────────────────────────────────────────────
   static const int INPUT_SIZE  = 224;
-  static const int NUM_CLASSES = 10;
+  static const int NUM_CLASSES = 6;   // ← updated from 10
 
   Interpreter?  _interpreter;
   List<String>  _labels = [];
   bool          _isLoaded = false;
 
   // ── First Aid Database ─────────────────────────────────────────
-  // Keys use normalized labels (see _normalizeLabel below)
+  // Only the 6 classes currently in labels.txt
   static const Map<String, Map<String, dynamic>> _firstAidDB = {
     'normal': {
       'decision':   '✅ No Injury Detected',
@@ -96,58 +98,6 @@ class Injuryservice {
         'Keep the person calm and still until help arrives.',
       ],
     },
-
-    'diabetic': {
-      'decision':   '🚨 Go to Hospital Immediately',
-      'severity':   'severe',
-      'goHospital': true,
-      'steps': [
-        'Do NOT walk on the wound if it is on the foot.',
-        'Cover gently with a clean bandage.',
-        'Do NOT apply any home remedies.',
-        'Go to hospital immediately — diabetic wounds worsen rapidly.',
-        'Strict blood sugar control is essential for healing.',
-      ],
-    },
-
-    'pressure': {
-      'decision':   '🚨 Go to Hospital Immediately',
-      'severity':   'severe',
-      'goHospital': true,
-      'steps': [
-        'Do NOT press or rub the wound.',
-        'Gently cover with a clean sterile dressing.',
-        'Reposition the patient to relieve pressure on the area.',
-        'Seek medical attention immediately.',
-        'These wounds require professional wound care treatment.',
-      ],
-    },
-
-    'surgical': {
-      'decision':   '🚨 Contact Your Doctor',
-      'severity':   'severe',
-      'goHospital': true,
-      'steps': [
-        'Do NOT touch or probe the wound.',
-        'Keep the area clean and dry at all times.',
-        'Watch for signs of infection: redness, swelling, pus, or fever.',
-        'Contact your surgeon or go to hospital immediately.',
-        'Do NOT remove surgical dressings without medical advice.',
-      ],
-    },
-
-    'venous': {
-      'decision':   '🚨 See a Doctor',
-      'severity':   'severe',
-      'goHospital': true,
-      'steps': [
-        'Elevate the leg above heart level.',
-        'Apply a clean dressing to the wound.',
-        'Do NOT wrap tightly — it can worsen circulation.',
-        'Seek medical attention as soon as possible.',
-        'These wounds require professional compression therapy.',
-      ],
-    },
   };
 
   // ── Initialize: load model + labels ───────────────────────────
@@ -163,6 +113,12 @@ class Injuryservice {
 
       _isLoaded = true;
       print('✅ MediAid model loaded — ${_labels.length} classes: $_labels');
+
+      // Sanity check — warn loudly if labels.txt doesn't match model output size
+      if (_labels.length != NUM_CLASSES) {
+        print('⚠️  WARNING: labels.txt has ${_labels.length} entries but '
+              'NUM_CLASSES is set to $NUM_CLASSES. These must match exactly.');
+      }
     } catch (e) {
       _isLoaded = false;
       print('❌ Model load failed: $e');
@@ -172,41 +128,25 @@ class Injuryservice {
   bool get isLoaded => _isLoaded;
 
   // ── Normalize label for DB lookup ─────────────────────────────
-  // "Diabetic Wounds" → "diabetic"
-  // "Pressure Wounds" → "pressure"
-  // "Surgical Wounds" → "surgical"
-  // "Venous Wounds"   → "venous"
-  // "Abrasions"       → "abrasions"  (unchanged)
-// Updated _normalizeLabel function in injury_classifier.dart
-String _normalizeLabel(String raw) {
-  String normalized = raw.trim().toLowerCase();
-  
-  // Handle specific cases from your labels.txt
-  switch (normalized) {
-    case 'diabetic wounds':
-      return 'diabetic';
-    case 'pressure wounds':
-      return 'pressure';
-    case 'surgical wounds':
-      return 'surgical';
-    case 'venous wounds':
-      return 'venous';
-    case 'abrasions':
-      return 'abrasions';
-    case 'bruises':
-      return 'bruises';
-    case 'burns':
-      return 'burns';
-    case 'cut':
-      return 'cut';
-    case 'laseration':
-      return 'laseration';
-    case 'normal':
-      return 'normal';
-    default:
-      return normalized;
+  // All 6 current labels are single words, so simple lowercase is enough.
+  // Kept as a switch in case labels.txt grows "Wounds" suffixes again later.
+  String _normalizeLabel(String raw) {
+    final normalized = raw.trim().toLowerCase();
+
+    switch (normalized) {
+      case 'diabetic wounds':
+        return 'diabetic';
+      case 'pressure wounds':
+        return 'pressure';
+      case 'surgical wounds':
+        return 'surgical';
+      case 'venous wounds':
+        return 'venous';
+      default:
+        return normalized;   // abrasions, bruises, burns, cut, laseration, normal
+    }
   }
-}
+
   // ── Main classify method ───────────────────────────────────────
   Future<ResultModel?> classify(File imageFile) async {
     if (!_isLoaded || _interpreter == null) {
@@ -228,8 +168,8 @@ String _normalizeLabel(String raw) {
       final scores   = (output[0] as List).cast<double>();
       final maxScore = scores.reduce((a, b) => a > b ? a : b);
       final maxIndex = scores.indexOf(maxScore);
-      final rawLabel = _labels[maxIndex];           // e.g. "Diabetic Wounds"
-      final normKey  = _normalizeLabel(rawLabel);   // e.g. "diabetic"
+      final rawLabel = _labels[maxIndex];           // e.g. "Burns"
+      final normKey  = _normalizeLabel(rawLabel);   // e.g. "burns"
 
       // Debug (remove after testing)
       print('🔍 Raw label : $rawLabel');

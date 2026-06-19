@@ -9,12 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mediaid_ui/model/resultModel.dart';
 import 'package:mediaid_ui/services/InjuryService.dart';
 
-// Import your screen paths — adjust if your folder structure differs
 import '../pages/firstAid/processing_screen.dart';
 import '../pages/firstAid/result_screen.dart';
 
 class ScanController extends GetxController {
-  final ImagePicker      _picker     = ImagePicker();
+  final ImagePicker   _picker     = ImagePicker();
   final Injuryservice _classifier = Injuryservice();
 
   // ── Observable state ──────────────────────────────────────────
@@ -63,7 +62,10 @@ class ScanController extends GetxController {
   // ── Core: analyze image ───────────────────────────────────────
   // Flow:
   //   1. Navigate to ProcessingScreen immediately (shows animation)
-  //   2. Run TFLite inference in background
+  //   2. Run TFLite inference in background, AND wait at least 1.5s
+  //      so ProcessingScreen is actually visible to the user
+  //      (inference alone often finishes in <300ms, which made the
+  //       screen appear to "skip" straight to Result before).
   //   3a. Success → store result → replace ProcessingScreen with ResultScreen
   //   3b. Failure → go back to ScanScreen + show error snackbar
   Future<void> analyzeImage() async {
@@ -74,22 +76,34 @@ class ScanController extends GetxController {
     // Show processing animation right away
     Get.to(() => const ProcessingScreen());
 
-    // Run inference
-    final prediction = await _classifier.classify(selectedImage.value!);
+    try {
+      // Minimum time ProcessingScreen stays visible, regardless of
+      // how fast inference actually finishes.
+      final minDisplay = Future.delayed(const Duration(milliseconds: 1500));
+      final inferenceFuture = _classifier.classify(selectedImage.value!);
 
-    isAnalyzing.value = false;
+      // Wait for both — whichever finishes last determines total wait time
+      final outcomes = await Future.wait([inferenceFuture, minDisplay]);
+      final prediction = outcomes[0];
 
-    if (prediction != null) {
-      result.value = prediction;
-      // Replace processing screen with result screen
-      Get.off(() => const ResultScreen());
-    } else {
-      // Go back to scan screen
+      isAnalyzing.value = false;
+
+      if (prediction != null) {
+        result.value = prediction as dynamic;
+        Get.off(() => const ResultScreen());
+      } else {
+        Get.back();
+        _showError(
+          'Analysis Failed',
+          'Could not analyze the image. Please retake with better lighting.',
+        );
+      }
+    } catch (e) {
+      // Catches any uncaught exception from classify() (e.g. shape
+      // mismatch if labels.txt/model class count don't match)
+      isAnalyzing.value = false;
       Get.back();
-      _showError(
-        'Analysis Failed',
-        'Could not analyze the image. Please retake with better lighting.',
-      );
+      _showError('Analysis Error', 'Something went wrong: $e');
     }
   }
 

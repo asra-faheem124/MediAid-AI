@@ -51,6 +51,8 @@ class ResultScreen extends StatelessWidget {
       _ => ColorConstants.success, // none
     };
 
+    final bool isEmergency = result.goHospital;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -246,10 +248,13 @@ class ResultScreen extends StatelessWidget {
                     // ─────────────────────────────────────────────
                     // EMERGENCY BUTTON (shown for all, prominent for severe)
                     // ─────────────────────────────────────────────
-                    DangerButton(
-                      text: "Emergency Help",
-                      onPressed: () => Get.to(const EmergencyScreen()),
-                    ),
+                    if (isEmergency) ...[
+                      DangerButton(
+                        text: "Emergency Help",
+                        onPressed: () => Get.to(const EmergencyScreen()),
+                      ),
+                      const SizedBox(height: 18),
+                    ],
 
                     const SizedBox(height: 18),
 

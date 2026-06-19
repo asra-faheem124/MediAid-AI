@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mediaid_ui/pages/auth/login_screen.dart';
+import 'package:mediaid_ui/pages/firstAid/emergency_screen.dart';
 import 'package:mediaid_ui/pages/firstAid/history_screen.dart';
 import 'package:mediaid_ui/pages/firstAid/scan_screen.dart';
 import 'package:mediaid_ui/pages/profile/profile_screen.dart';
@@ -35,12 +36,10 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 // ================= TOP SECTION =================
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     // Greeting Section
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,8 +72,7 @@ class HomeScreen extends StatelessWidget {
                           )
                         : PopupMenuButton<String>(
                             offset: const Offset(0, 55),
-                            color:Theme.of(context).scaffoldBackgroundColor
-,
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             elevation: 10,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -86,10 +84,7 @@ class HomeScreen extends StatelessWidget {
                             icon: CircleAvatar(
                               radius: 22,
                               backgroundColor: ColorConstants.primary,
-                              child: Text(
-                                initial,
-                                style: AppTextStyles.button,
-                              ),
+                              child: Text(initial, style: AppTextStyles.button),
                             ),
                             onSelected: (value) async {
                               switch (value) {
@@ -167,7 +162,9 @@ class HomeScreen extends StatelessWidget {
                         icon: Icons.notifications_active_outlined,
                         title: "Emergency",
                         iconColor: ColorConstants.danger,
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(const EmergencyScreen());
+                        },
                       ),
                     ),
                   ],

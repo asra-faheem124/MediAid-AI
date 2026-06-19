@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:mediaid_ui/components/app_theme.dart';
 import 'package:mediaid_ui/controller/AuthController.dart';
 import 'package:mediaid_ui/controller/ScanController.dart';
+import 'package:mediaid_ui/controller/history_controller.dart';
 import 'package:mediaid_ui/controller/theme_controller.dart';
 import 'package:mediaid_ui/firebase_options.dart';
 import 'package:mediaid_ui/pages/firstScreens/splash.dart';
@@ -19,6 +20,7 @@ void main() async {
   Get.put(Authcontroller());
   Get.put(ScanController());
   Get.put(ThemeController()); 
+  Get.put(HistoryController());
 
   runApp(const MyApp());
 }

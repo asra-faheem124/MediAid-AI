@@ -45,6 +45,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   image_picker: ^1.1.2
   http: ^1.2.1
+  uuid: ^4.3.3
    # Google Sign In (optional but impressive)
   google_sign_in: ^6.2.1
 

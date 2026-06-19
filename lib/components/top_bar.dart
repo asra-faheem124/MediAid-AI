@@ -6,12 +6,15 @@ class TopBar extends StatelessWidget {
   final String title;
   final IconData? actionIcon;
   final bool showBackButton;
+  final VoidCallback? onActionTap;
 
   const TopBar({
     super.key,
     required this.title,
     this.actionIcon,
     this.showBackButton = false,
+    this.onActionTap,
+
   });
 
   @override
@@ -43,7 +46,7 @@ class TopBar extends StatelessWidget {
 
         // Action Icon
         if (actionIcon != null)
-          IconButton(onPressed: () {}, icon: Icon(actionIcon))
+          IconButton(onPressed: onActionTap ?? () {}, icon: Icon(actionIcon))
         else
           const SizedBox(width: 48), // placeholder for alignment
       ],

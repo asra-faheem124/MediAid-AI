@@ -1,10 +1,21 @@
+// ============================================================
+// bottom_navigation_bar.dart
+// Safety-net check: if a logged-in (non-guest) user somehow
+// lands here without completing onboarding (e.g. hot restart,
+// or app reopened mid-flow), redirect to Furtherinfo instead
+// of showing the normal tabs. Primary onboarding routing still
+// happens right after login/signup in Authcontroller.
+// ============================================================
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mediaid_ui/pages/auth/furtherInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mediaid_ui/components/constants.dart';
 import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/components/buttons.dart';
+import 'package:mediaid_ui/controller/AuthController.dart';
 import 'package:mediaid_ui/home_screen.dart';
 import 'package:mediaid_ui/pages/firstAid/guide_screen.dart';
 import 'package:mediaid_ui/pages/firstAid/history_screen.dart';
@@ -21,12 +32,47 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   int selectedIndex = 0;
 
+  bool _checkingOnboarding = true;
+  bool _needsOnboarding = false;
+
   final List<Widget> pages = [
     const HomeScreen(),
     const HistoryScreen(),
     const GuideScreen(),
     const ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkOnboardingStatus();
+  }
+
+  // ── Check once on load whether this user still needs onboarding ──
+  Future<void> _checkOnboardingStatus() async {
+    final bool guest = await _isGuest();
+    final user = FirebaseAuth.instance.currentUser;
+
+    // Guests and logged-out users skip onboarding entirely —
+    // it only applies to real signed-up accounts.
+    if (guest || user == null) {
+      setState(() {
+        _checkingOnboarding = false;
+        _needsOnboarding = false;
+      });
+      return;
+    }
+
+    final Authcontroller authController = Get.find<Authcontroller>();
+    final bool completed = await authController.hasCompletedOnboarding(
+      user.uid,
+    );
+
+    setState(() {
+      _checkingOnboarding = false;
+      _needsOnboarding = !completed;
+    });
+  }
 
   Future<bool> _isGuest() async {
     final prefs = await SharedPreferences.getInstance();
@@ -54,8 +100,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   void _showLoginPrompt(int attemptedIndex) {
-    final String featureName =
-        attemptedIndex == 1 ? "History" : "Profile";
+    final String featureName = attemptedIndex == 1 ? "History" : "Profile";
 
     showModalBottomSheet(
       context: context,
@@ -155,6 +200,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    // ── Still checking Firestore — show a brief loader ──────────
+    if (_checkingOnboarding) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    // ── New user, hasn't completed onboarding — block everything ──
+    if (_needsOnboarding) {
+      return const Furtherinfo();
+    }
+
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -169,10 +224,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
         showUnselectedLabels: true,
 
         backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
-        selectedItemColor:
-            theme.bottomNavigationBarTheme.selectedItemColor,
-        unselectedItemColor:
-            theme.bottomNavigationBarTheme.unselectedItemColor,
+        selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor,
+        unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor,
 
         items: const [
           BottomNavigationBarItem(

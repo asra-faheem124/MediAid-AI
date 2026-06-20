@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mediaid_ui/components/buttons.dart';
 import 'package:mediaid_ui/components/form_components.dart';
 import 'package:mediaid_ui/components/profile_components.dart';
+import 'package:mediaid_ui/components/text_styles.dart';
 import 'package:mediaid_ui/components/top_bar.dart';
 import 'package:mediaid_ui/controller/UserController.dart';
 
@@ -29,6 +30,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
 
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+
             children: [
               const TopBar(
                 title: "Edit Profile",
@@ -38,7 +41,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
               const SizedBox(height: 30),
 
-              const ProfileImagePicker(),
+              Center(child: const ProfileImagePicker()),
 
               const SizedBox(height: 30),
 
@@ -55,12 +58,45 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 icon: Icons.email_outlined,
                 controller: authController.emailController,
               ),
-
               const SizedBox(height: 20),
 
-              const CustomTextField(
-                hintText: "Phone Number",
+              CustomTextField(
+                hintText: "Your Address",
+                icon: Icons.home,
+                controller: authController.addressController,
+              ),
+
+              const SizedBox(height: 20),
+              Text("Emeregncy Contact 1", style: AppTextStyles.body(context)),
+              const SizedBox(height: 20),
+
+              CustomTextField(
+                hintText: "name",
+                icon: Icons.person,
+                controller: authController.emergencyName1,
+              ),
+              const SizedBox(height: 20),
+
+              CustomTextField(
+                hintText: "Contact Number",
                 icon: Icons.phone_outlined,
+                controller: authController.emegergencycontactNumber1,
+              ),
+
+              const SizedBox(height: 20),
+              Text("Emeregncy Contact 2", style: AppTextStyles.body(context)),
+              const SizedBox(height: 20),
+
+              CustomTextField(
+                hintText: "name",
+                icon: Icons.person,
+                controller: authController.emergencyName2,
+              ),
+              const SizedBox(height: 20),
+              CustomTextField(
+                hintText: "Contact Number",
+                icon: Icons.phone_outlined,
+                controller: authController.emergencyContactNumber2,
               ),
 
               const SizedBox(height: 40),

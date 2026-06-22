@@ -13,16 +13,23 @@ import 'package:mediaid_ui/components/top_bar.dart';
 import 'package:mediaid_ui/controller/ScanController.dart';
 import 'package:mediaid_ui/model/resultModel.dart';
 import 'package:mediaid_ui/pages/firstAid/emergency_screen.dart';
+import 'package:mediaid_ui/services/VoiceService.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
 
   @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  @override
+  bool isSpeaking = false;
   Widget build(BuildContext context) {
     final ScanController scanController = Get.find<ScanController>();
     final ResultModel? result = scanController.result.value;
-
     // Safety fallback — should never be null here
+    final VoiceService voice = VoiceService();
     if (result == null) {
       return Scaffold(
         body: Center(
@@ -52,6 +59,22 @@ class ResultScreen extends StatelessWidget {
     };
 
     final bool isEmergency = result.goHospital;
+    String voiceText =
+        """
+Hello.
+
+Detected injury is ${result.injury}.
+
+Severity level is ${result.severity}.
+
+${result.decision}
+
+First aid instructions.
+
+${result.firstAidSteps.asMap().entries.map((e) => "Step ${e.key + 1}. ${e.value}").join(". ")}
+
+Please seek professional medical help if symptoms worsen.
+""";
 
     return Scaffold(
       body: SafeArea(
@@ -235,15 +258,34 @@ class ResultScreen extends StatelessWidget {
 
                     // ─────────────────────────────────────────────
                     // VOICE GUIDE BUTTON
-                    // ─────────────────────────────────────────────
                     PrimaryButton(
-                      text: "Voice Guide",
-                      onPressed: () {
-                        // TODO: plug in TTS — pass result.firstAidSteps
+                      text: isSpeaking ? "Stop Voice" : "Voice Guide",
+
+                      onPressed: () async {
+                        if (!isSpeaking) {
+                          await voice.init(
+                            onComplete: () {
+                              setState(() {
+                                isSpeaking = false;
+                              });
+                            },
+                          );
+
+                          setState(() {
+                            isSpeaking = true;
+                          });
+
+                          await voice.speak(voiceText);
+                        } else {
+                          await voice.stop();
+
+                          setState(() {
+                            isSpeaking = false;
+                          });
+                        }
                       },
                     ),
-
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
 
                     // ─────────────────────────────────────────────
                     // EMERGENCY BUTTON (shown for all, prominent for severe)
